@@ -5,6 +5,7 @@
 #ifndef HTTPWINDOW_H
 #define HTTPWINDOW_H
 
+#include <QSslSocket>
 #include <QNetworkAccessManager>
 #include <QUrl>
 #include <condition_variable>
@@ -19,6 +20,10 @@ class QSslError;
 class QAuthenticator;
 class QNetworkReply;
 class LogView;
+class SearchWindow;
+
+
+
 
 class HttpRequest : public QObject
 {
@@ -52,6 +57,7 @@ private:
     QString Content_;
     QSemaphore Sem_;
     LogView *Log_;
+    SearchWindow *Search_Window;
 
     std::shared_ptr<Bot> Bot_;
 };

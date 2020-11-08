@@ -33,5 +33,9 @@
         <file>images/add_pressed.png</file>
         <file>LogArea.qml</file>
         <file>UrlList.qml</file>
+        <file>images/save_unpressed.png</file>
+        <file>images/save_pressed.png</file>
+        <file>images/file_unpressed.png</file>
+        <file>images/file_pressed.png</file>
     </qresource>
 </RCC>

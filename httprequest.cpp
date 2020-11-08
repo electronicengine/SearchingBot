@@ -6,6 +6,7 @@
 #include <iostream>
 #include "httprequest.h"
 #include "logview.h"
+#include "searchwindow.h"
 
 
 
@@ -19,6 +20,8 @@ HttpRequest::HttpRequest(LogView *Log, QObject *parent)
 
     Log_ = Log;
     Bot_ = std::make_shared<Bot>(Log_);
+//    Search_Window = Window;
+
 
     connect(&qnam, &QNetworkAccessManager::authenticationRequired,
             this, &HttpRequest::slotAuthenticationRequired);
@@ -36,9 +39,8 @@ HttpRequest::HttpRequest(LogView *Log, QObject *parent)
 void HttpRequest::startRequest(std::vector<QString> Request)
 {
 
-    Log_->appendText("************************");
-
     Request_ = Request;
+    Log_->appendText("************************");
 
     httpRequestAborted = false;
 

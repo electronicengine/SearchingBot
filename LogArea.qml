@@ -6,35 +6,38 @@ import QtQml.Models 2.1
 Item
 {
 
-    Component.onCompleted: {}
+    Flickable
+    {
+        id: flickable
+        anchors.fill: parent
 
-        Flickable
-        {
-            id: flickable
-            anchors.fill: parent
+        contentWidth: 2000
 
-            contentWidth: 2000
-
-                TextArea.flickable: TextArea
+            TextArea.flickable: TextArea
+            {
+                id:rt
+                background: Rectangle
                 {
-
-                    background: Rectangle
-                    {
-                        anchors.fill: parent
-                        color: "#272d2f"
-                    }
-
-                    objectName: "textarea"
-                    color: "#67cbef"
-                    width: parent.width
-                    height: parent.height
-                    readOnly: false
-
+                    anchors.fill: parent
+                    color: "#272d2f"
                 }
 
-                ScrollBar.vertical: ScrollBar { }
+                objectName: "textarea"
+                color: "#67cbef"
+                width: parent.width
+                height: parent.height
+                readOnly: false
 
-        }
+
+                function getAllText() : string
+                {
+                    return rt.text
+                }
+            }
+
+            ScrollBar.vertical: ScrollBar { }
+
+    }
 
 
 }

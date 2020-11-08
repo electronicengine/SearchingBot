@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>LogView</class>
- <widget class="QWidget" name="LogView">
+ <class>FileLog</class>
+ <widget class="QWidget" name="FileLog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1099</width>
-    <height>874</height>
+    <width>550</width>
+    <height>703</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Log View</string>
+   <string>Form</string>
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(46, 52, 54);
@@ -34,43 +34,90 @@ GridLayout{backgroundColor: transparent;}
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QQuickWidget" name="quickWidget">
+    <widget class="QLabel" name="label_6">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="text">
+      <string>File Name</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLineEdit" name="file_name">
      <property name="styleSheet">
       <string notr="true">background-color: #272d2f;
 </string>
      </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QQuickWidget" name="quickWidget">
      <property name="resizeMode">
       <enum>QQuickWidget::SizeRootObjectToView</enum>
      </property>
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <layout class="QGridLayout" name="gridLayout_3">
+    <layout class="QGridLayout" name="gridLayout_3">
+     <item row="0" column="0">
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
+        <widget class="QPushButton" name="delete_button">
+         <property name="minimumSize">
+          <size>
+           <width>120</width>
+           <height>120</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>120</width>
+           <height>120</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">#delete_button
+{
+border-image: url(:/images/delete_unpressed.png);
+}
+#delete_button:pressed
+{
+border-image: url(:/images/delete_pressed.png);
+}
+</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
        <item row="1" column="0">
-        <widget class="QLabel" name="label_9">
+        <widget class="QLabel" name="ops_name_2">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
          <property name="minimumSize">
           <size>
-           <width>100</width>
+           <width>120</width>
            <height>0</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>300</width>
+           <width>120</width>
            <height>16777215</height>
           </size>
          </property>
@@ -78,94 +125,34 @@ GridLayout{backgroundColor: transparent;}
           <string notr="true">color: rgb(114, 159, 207);</string>
          </property>
          <property name="text">
-          <string>Save</string>
+          <string>Delete</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QPushButton" name="save_button">
-         <property name="minimumSize">
-          <size>
-           <width>120</width>
-           <height>120</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>120</width>
-           <height>120</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">#save_button
-{
-border-image: url(:/images/save_unpressed.png);
-}
-#save_button:pressed
-{
-border-image: url(:/images/save_pressed.png);
-}
-</string>
-         </property>
-         <property name="text">
-          <string/>
          </property>
         </widget>
        </item>
       </layout>
      </item>
-     <item>
-      <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0">
-        <widget class="QPushButton" name="open_button">
-         <property name="minimumSize">
-          <size>
-           <width>120</width>
-           <height>120</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>120</width>
-           <height>120</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">#open_button
-{
-border-image: url(:/images/file_unpressed.png);
-}
-#open_button:pressed
-{
-border-image: url(:/images/file_pressed.png);
-}
-</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
+     <item row="0" column="1">
+      <layout class="QGridLayout" name="gridLayout">
        <item row="1" column="0">
-        <widget class="QLabel" name="label_11">
+        <widget class="QLabel" name="ops_name">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
          <property name="minimumSize">
           <size>
-           <width>100</width>
+           <width>120</width>
            <height>0</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>300</width>
+           <width>120</width>
            <height>16777215</height>
           </size>
          </property>
@@ -173,10 +160,40 @@ border-image: url(:/images/file_pressed.png);
           <string notr="true">color: rgb(114, 159, 207);</string>
          </property>
          <property name="text">
-          <string>Open</string>
+          <string>Ok</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QPushButton" name="ok_button">
+         <property name="minimumSize">
+          <size>
+           <width>120</width>
+           <height>120</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>120</width>
+           <height>120</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">#ok_button
+{
+border-image: url(:/images/pass_unpressed.png);
+}
+#ok_button:pressed
+{
+border-image: url(:/images/pass_pressed.png);
+}
+</string>
+         </property>
+         <property name="text">
+          <string/>
          </property>
         </widget>
        </item>

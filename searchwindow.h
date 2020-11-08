@@ -23,17 +23,19 @@ public:
     ~SearchWindow();
 
     void appendUrlList(const QString &Str);
+    void searchUrlListFileOpenCallBack(const QStringList &UrlList);
 
 private slots:
     void showLogButtonClicked();
     void addListButtonClicked();
     void clearButtonClicked();
     void startButtonClicked();
+    void openUrlListFileButtonClicked();
 
 private:
     Ui::SearchWindow *ui;
 
-    std::shared_ptr<LogView> Log_View;
+    LogView *Log_View;
     std::shared_ptr<QmlListObject> List_Object;
     std::shared_ptr<HttpRequest> Http_Request;
 

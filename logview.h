@@ -1,7 +1,7 @@
 #ifndef LOGVIEW_H
 #define LOGVIEW_H
 
-#include <QWidget>
+#include <QMainWindow>
 
 namespace Ui {
 class LogView;
@@ -16,6 +16,14 @@ public:
     ~LogView();
 
     void appendText(const QString &Txt);
+    QString getAllText();
+    void openFileCallBack(const QString &Content);
+    void clearText();
+
+public slots:
+    void saveButtonClicked();
+    void openButtonClicked();
+
 private:
     Ui::LogView *ui;
 };

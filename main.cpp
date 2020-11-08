@@ -4,6 +4,8 @@
 #include <QtNetwork/QNetworkReply>
 #include <QString>
 #include <QApplication>
+#include <QSslSocket>
+
 #include "searchwindow.h"
 
 

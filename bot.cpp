@@ -10,7 +10,6 @@ Bot::Bot(LogView *Log)
 
 void Bot::searchPrefix(QString &Content, QString &Prefix, QString &BanPrefix)
 {
-    (void)Content;
 
     Ban_Prefix = BanPrefix;
 

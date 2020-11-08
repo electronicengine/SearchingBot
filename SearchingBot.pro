@@ -1,4 +1,4 @@
-QT       += core gui charts network quickwidgets
+QT       += core gui charts network quickwidgets qml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -11,6 +11,7 @@ CONFIG -= app_bundle
 
 SOURCES += \
         bot.cpp \
+        filelog.cpp \
         logview.cpp \
         main.cpp \
         httprequest.cpp \
@@ -20,11 +21,23 @@ SOURCES += \
 
 HEADERS += \
     bot.h \
+    filelog.h \
     httprequest.h \
     logview.h \
     qmllistitem.h \
     qmllistobject.h \
     searchwindow.h
+
+ANDROID_EXTRA_LIBS += \
+    /home/yusuf/Android/Sdk/android_openssl/latest/arm64/libcrypto_1_1.so \
+    /home/yusuf/Android/Sdk/android_openssl/latest/arm64/libssl_1_1.so \
+    /home/yusuf/Android/Sdk/android_openssl/latest/arm/libcrypto_1_1.so \
+    /home/yusuf/Android/Sdk/android_openssl/latest/arm/libssl_1_1.so \
+    /home/yusuf/Android/Sdk/android_openssl/latest/arm/libcrypto_1_1.so \
+    /home/yusuf/Android/Sdk/android_openssl/latest/x86/libssl_1_1.so \
+    /home/yusuf/Android/Sdk/android_openssl/latest/x86/libcrypto_1_1.so \
+    /home/yusuf/Android/Sdk/android_openssl/latest/x86_64/libssl_1_1.so \
+    /home/yusuf/Android/Sdk/android_openssl/latest/x86_64/libcrypto_1_1.so
 
 
 # Default rules for deployment.
@@ -33,6 +46,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 FORMS += \
+    filelog.ui \
     logview.ui \
     searchwindow.ui
 
