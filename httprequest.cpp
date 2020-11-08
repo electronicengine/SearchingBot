@@ -3,25 +3,22 @@
 ****************************************************************************/
 #include <QtNetwork>
 #include <QUrl>
-
+#include <iostream>
 #include "httprequest.h"
-
-#if QT_CONFIG(ssl)
-const char defaultUrl[] = "https://www.qt.io/";
-#else
-const char defaultUrl[] = "http://www.qt.io/";
-#endif
-const char defaultFileName[] = "index.html";
+#include "logview.h"
 
 
 
-HttpRequest::HttpRequest(QObject *parent)
+
+HttpRequest::HttpRequest(LogView *Log, QObject *parent)
     : QObject(parent)
     , reply(nullptr)
     , httpRequestAborted(false)
     , httpRequestFinished(false)
 {
 
+    Log_ = Log;
+    Bot_ = std::make_shared<Bot>(Log_);
 
     connect(&qnam, &QNetworkAccessManager::authenticationRequired,
             this, &HttpRequest::slotAuthenticationRequired);
@@ -36,24 +33,20 @@ HttpRequest::HttpRequest(QObject *parent)
 
 
 
-void HttpRequest::startRequest(const QUrl &requestedUrl)
+void HttpRequest::startRequest(std::vector<QString> Request)
 {
 
-    url = requestedUrl;
+    Log_->appendText("************************");
+
+    Request_ = Request;
+
     httpRequestAborted = false;
 
-    reply = qnam.get(QNetworkRequest(url));
+    reply = qnam.get(QNetworkRequest(Request[0]));
     connect(reply, &QNetworkReply::finished, this, &HttpRequest::httpFinished);
     connect(reply, &QIODevice::readyRead, this, &HttpRequest::httpReadyRead);
 
 
-}
-
-
-
-void HttpRequest::makeRequest(const QUrl &Address)
-{
-    startRequest(Address);
 }
 
 
@@ -84,50 +77,18 @@ void HttpRequest::httpFinished()
     reply = nullptr;
 
     if (!redirectionTarget.isNull()) {
-        const QUrl redirectedUrl = url.resolved(redirectionTarget.toUrl());
+        const QUrl redirectedUrl = QUrl(Request_[0]).resolved(redirectionTarget.toUrl());
 
-        startRequest(redirectedUrl);
+        Request_[0] = redirectedUrl.toString();
+
+        startRequest(Request_);
         return;
     }
     else
     {
         emit requestResult(Content_);
 
-        qDebug() << "************************";
-
-    //    QString result = reply->readAll();
-        QString result = "*9134*129ı4kpğiewr<a href=\"/diseases-conditions/acanthosis-nigricans/symptoms-causes/syc-20368983\">Acanthosis nigricans</a>WFWEWFWEF23";
-
-        QString beginning = "<a href=";
-        QString ending = "</a>";
-        int begin = 0;
-        int end = 0;
-        do
-        {
-
-            begin = result.indexOf(beginning);
-            if(begin >= 0)
-            {
-                end = result.indexOf(ending);
-
-                if(end >= 0)
-                {
-                    QString sub_str = result.left(end);
-                    QString extracted = sub_str.mid(begin + beginning.size());
-
-                    qDebug() << extracted << "\n\n";
-
-                }
-                else
-                    qDebug() << "Cannot find last";
-            }
-            else
-            {
-                qDebug() << "Cannot find anymore";
-                break;
-            }
-
-        }while(begin < 0);
+        Bot_->searchPrefix(Content_, Request_[1], Request_[2]);
     }
 
 }
@@ -138,9 +99,7 @@ void HttpRequest::httpReadyRead()
     // We read all of its new data and write it into the file.
     // That way we use less RAM than when reading it at the finished()
     // signal of the QNetworkReply
-    Content_ = reply->readAll();
-
-
+    Content_ += reply->readAll();
 }
 
 void HttpRequest::enableDownloadButton()

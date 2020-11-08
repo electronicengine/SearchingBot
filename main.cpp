@@ -3,7 +3,8 @@
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkReply>
 #include <QString>
-#include "httprequest.h"
+#include <QApplication>
+#include "searchwindow.h"
 
 
 
@@ -11,14 +12,11 @@
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication a(argc, argv);
+    QApplication a(argc, argv);
 
-    HttpRequest http_request;
+    SearchWindow *search_window = new SearchWindow;
 
-
-
-    http_request.makeRequest(QUrl("https://www.mayoclinic.org/diseases-conditions/index?letter=A"));
-
+    search_window->show();
 
 
 

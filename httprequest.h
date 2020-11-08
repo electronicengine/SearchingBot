@@ -12,24 +12,22 @@
 #include <QSemaphore>
 #include <memory>
 #include <mutex>
+#include <bot.h>
 
 class HttpWindow;
 class QSslError;
 class QAuthenticator;
 class QNetworkReply;
-
+class LogView;
 
 class HttpRequest : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit HttpRequest(QObject *parent = nullptr);
+    explicit HttpRequest(LogView *Log, QObject *parent = nullptr);
 
-
-    void makeRequest(const QUrl &Address);
-
-    void startRequest(const QUrl &requestedUrl);
+    void startRequest(std::vector<QString> Request);
 
 private slots:
     void cancelDownload();
@@ -46,14 +44,16 @@ signals:
 
 private:
 
-    QUrl url;
+    std::vector<QString> Request_;
     QNetworkAccessManager qnam;
     QNetworkReply *reply;
     bool httpRequestAborted;
     bool httpRequestFinished;
     QString Content_;
     QSemaphore Sem_;
+    LogView *Log_;
 
+    std::shared_ptr<Bot> Bot_;
 };
 
 #endif

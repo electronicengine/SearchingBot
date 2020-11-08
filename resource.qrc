@@ -1,0 +1,37 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/wifi_unlocked.png</file>
+        <file>images/wifi_locked.png</file>
+        <file>images/up_unpressed.png</file>
+        <file>images/up_pressed.png</file>
+        <file>images/toggle_button_on.png</file>
+        <file>images/toggle_button_off.png</file>
+        <file>images/template.png</file>
+        <file>images/stop_unpressed.png</file>
+        <file>images/stop_pressed.png</file>
+        <file>images/start_unpressed.png</file>
+        <file>images/start_pressed.png</file>
+        <file>images/show_unpressed.png</file>
+        <file>images/show_pressed.png</file>
+        <file>images/right_unpressed.png</file>
+        <file>images/right_pressed.png</file>
+        <file>images/refresh_unpressed.png</file>
+        <file>images/refresh_pressed.png</file>
+        <file>images/pass_unpressed.png</file>
+        <file>images/pass_previous_unpressed.png</file>
+        <file>images/pass_previous_pressed.png</file>
+        <file>images/pass_pressed.png</file>
+        <file>images/left_unpressed.png</file>
+        <file>images/left_pressed.png</file>
+        <file>images/laser_unlocked.png</file>
+        <file>images/laser_locked.png</file>
+        <file>images/down_unpressed.png</file>
+        <file>images/down_pressed.png</file>
+        <file>images/delete_unpressed.png</file>
+        <file>images/delete_pressed.png</file>
+        <file>images/add_unpressed.png</file>
+        <file>images/add_pressed.png</file>
+        <file>LogArea.qml</file>
+        <file>UrlList.qml</file>
+    </qresource>
+</RCC>
