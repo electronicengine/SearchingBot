@@ -49,6 +49,13 @@ QString QmlListObject::getItem(int Index)
 
 
 
+void QmlListObject::eraseItem(int Index)
+{
+
+}
+
+
+
 int QmlListObject::getSize()
 {
     return Item_List.size();

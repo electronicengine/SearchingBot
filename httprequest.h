@@ -30,9 +30,9 @@ class HttpRequest : public QObject
     Q_OBJECT
 
 public:
-    explicit HttpRequest(LogView *Log, QObject *parent = nullptr);
+    explicit HttpRequest(QObject *parent = nullptr);
 
-    void startRequest(std::vector<QString> Request);
+    void makeRequest(std::vector<QString> Request, QStringList &ResultList);
 
 private slots:
     void cancelDownload();
@@ -54,12 +54,7 @@ private:
     QNetworkReply *reply;
     bool httpRequestAborted;
     bool httpRequestFinished;
-    QString Content_;
-    QSemaphore Sem_;
-    LogView *Log_;
-    SearchWindow *Search_Window;
 
-    std::shared_ptr<Bot> Bot_;
 };
 
 #endif

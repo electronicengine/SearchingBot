@@ -37,9 +37,12 @@ private:
 
     LogView *Log_View;
     std::shared_ptr<QmlListObject> List_Object;
-    std::shared_ptr<HttpRequest> Http_Request;
 
     std::queue<std::vector<QString>> Search_Queue;
+
+
+    void lockInterface(bool Value);
+
 
 };
 

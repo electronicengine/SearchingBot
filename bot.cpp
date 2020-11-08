@@ -1,15 +1,16 @@
 #include "bot.h"
 #include <iostream>
 
-Bot::Bot(LogView *Log)
+Bot::Bot()
 {
-    Log_ = Log;
 }
 
 
 
-void Bot::searchPrefix(QString &Content, QString &Prefix, QString &BanPrefix)
+void Bot::searchPrefix(QString &Content, QString &Prefix, QString &BanPrefix, QStringList &ResultList)
 {
+
+    Founded_Words = &ResultList;
 
     Ban_Prefix = BanPrefix;
 
@@ -176,7 +177,7 @@ int Bot::makeEndPrefix(QString &Content)
     if(!Ban_Prefix.isEmpty())
         deleteBanPrefix(searched_text);
 
-    Log_->appendText(searched_text);
+    Founded_Words->append(searched_text);
 
     return 0;
 }

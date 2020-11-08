@@ -11,15 +11,13 @@
 
 
 
-HttpRequest::HttpRequest(LogView *Log, QObject *parent)
+HttpRequest::HttpRequest(QObject *parent)
     : QObject(parent)
     , reply(nullptr)
     , httpRequestAborted(false)
     , httpRequestFinished(false)
 {
 
-    Log_ = Log;
-    Bot_ = std::make_shared<Bot>(Log_);
 //    Search_Window = Window;
 
 
@@ -36,18 +34,45 @@ HttpRequest::HttpRequest(LogView *Log, QObject *parent)
 
 
 
-void HttpRequest::startRequest(std::vector<QString> Request)
+void HttpRequest::makeRequest(std::vector<QString> Request, QStringList &ResultList)
 {
 
+    Bot bot;
+    QString html_content;
+
     Request_ = Request;
-    Log_->appendText("************************");
 
     httpRequestAborted = false;
 
     reply = qnam.get(QNetworkRequest(Request[0]));
-    connect(reply, &QNetworkReply::finished, this, &HttpRequest::httpFinished);
-    connect(reply, &QIODevice::readyRead, this, &HttpRequest::httpReadyRead);
 
+//    connect(reply, &QNetworkReply::finished, this, &HttpRequest::httpFinished);
+//    connect(reply, &QIODevice::readyRead, this, &HttpRequest::httpReadyRead);
+
+
+    while(!reply->isFinished())
+    {
+        qApp->processEvents();
+
+    }
+
+    const QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
+
+    if (!redirectionTarget.isNull())
+    {
+        const QUrl redirectedUrl = QUrl(Request_[0]).resolved(redirectionTarget.toUrl());
+
+        Request_[0] = redirectedUrl.toString();
+
+        makeRequest(Request_, ResultList);
+    }
+    else
+    {
+        html_content = reply->readAll();
+
+        bot.searchPrefix(html_content, Request_[1], Request_[2], ResultList);
+
+    }
 
 }
 
@@ -57,6 +82,8 @@ void HttpRequest::cancelDownload()
 {
 
 }
+
+
 
 void HttpRequest::httpFinished()
 {
@@ -83,14 +110,12 @@ void HttpRequest::httpFinished()
 
         Request_[0] = redirectedUrl.toString();
 
-        startRequest(Request_);
+//        makeRequest(Request_);
         return;
     }
     else
     {
-        emit requestResult(Content_);
 
-        Bot_->searchPrefix(Content_, Request_[1], Request_[2]);
     }
 
 }
@@ -101,7 +126,7 @@ void HttpRequest::httpReadyRead()
     // We read all of its new data and write it into the file.
     // That way we use less RAM than when reading it at the finished()
     // signal of the QNetworkReply
-    Content_ += reply->readAll();
+//    Content_ += reply->readAll();
 }
 
 void HttpRequest::enableDownloadButton()

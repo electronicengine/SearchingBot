@@ -10,11 +10,10 @@
 class Bot
 {
 public:
-    Bot(LogView *Log);
-    void searchPrefix(QString &Content, QString &Prefix, QString &BanPrefix);
+    Bot();
+    void searchPrefix(QString &Content, QString &Prefix, QString &BanPrefix, QStringList &ResultList);
 
 private:
-    LogView *Log_;
     std::vector<std::pair<QString, QString>> Begin_End_Prefixes;
     std::vector<std::pair<QString, char>> Prefix_Pieces;
     QString Ban_Prefix;
@@ -25,7 +24,7 @@ private:
     int deleteBanPrefix(QString &Content);
     QString findInvalidPrefixText(int Index, QString &Content);
     QString findCloserPrefix(const char &Prefix);
-
+    QStringList *Founded_Words;
 
 
 };

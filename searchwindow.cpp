@@ -8,10 +8,11 @@
 #include <QQuickItem>
 #include <QMetaObject>
 #include <QDebug>
-//#include <QtAndroid>
+#include <QtAndroid>
 #include "searchwindow.h"
 #include "httprequest.h"
 #include "filelog.h"
+#include "searchprocessbox.h"
 #include "ui_searchwindow.h"
 
 SearchWindow::SearchWindow(QWidget *parent) :
@@ -20,26 +21,25 @@ SearchWindow::SearchWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-//    auto  result = QtAndroid::checkPermission(QString("android.permission.READ_EXTERNAL_STORAGE"));
-//        if(result == QtAndroid::PermissionResult::Denied){
-//            QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync(QStringList({"android.permission.READ_EXTERNAL_STORAGE"}));
-//            if(resultHash["android.permission.READ_EXTERNAL_STORAGE"] == QtAndroid::PermissionResult::Denied)
-//                qDebug() << "permission denied read";
+    auto  result = QtAndroid::checkPermission(QString("android.permission.READ_EXTERNAL_STORAGE"));
+        if(result == QtAndroid::PermissionResult::Denied){
+            QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync(QStringList({"android.permission.READ_EXTERNAL_STORAGE"}));
+            if(resultHash["android.permission.READ_EXTERNAL_STORAGE"] == QtAndroid::PermissionResult::Denied)
+                qDebug() << "permission denied read";
 
-//        }
+        }
 
-//    result = QtAndroid::checkPermission(QString("android.permission.WRITE_EXTERNAL_STORAGE"));
-//        if(result == QtAndroid::PermissionResult::Denied){
-//            QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync(QStringList({"android.permission.WRITE_EXTERNAL_STORAGE"}));
-//            if(resultHash["android.permission.WRITE_EXTERNAL_STORAGE"] == QtAndroid::PermissionResult::Denied)
-//                qDebug() << "permission denied write";
-//        }
+    result = QtAndroid::checkPermission(QString("android.permission.WRITE_EXTERNAL_STORAGE"));
+        if(result == QtAndroid::PermissionResult::Denied){
+            QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync(QStringList({"android.permission.WRITE_EXTERNAL_STORAGE"}));
+            if(resultHash["android.permission.WRITE_EXTERNAL_STORAGE"] == QtAndroid::PermissionResult::Denied)
+                qDebug() << "permission denied write";
+        }
 
 
     Log_View = new LogView();
 
     List_Object = std::make_shared<QmlListObject>(ui->url_list);
-    Http_Request = std::make_shared<HttpRequest>(Log_View);
 
     connect(ui->look_logs_button, SIGNAL(clicked()), this, SLOT(showLogButtonClicked()));
     connect(ui->url_add_button, SIGNAL(clicked()), this, SLOT(addListButtonClicked()));
@@ -106,13 +106,34 @@ void SearchWindow::clearButtonClicked()
 void SearchWindow::startButtonClicked()
 {
 
-    Log_View->show();
+    SearchProcessBox progress_box;
 
-    for(int i=0; i<(int)Search_Queue.size(); i++)
+    HttpRequest Http_Request;
+    int queue_size = Search_Queue.size();
+
+    progress_box.show();
+
+    for(int i=0; i<(int)queue_size; i++)
     {
-        Http_Request->startRequest(Search_Queue.front());
+        QStringList result_list;
+
+        std::vector<QString> &current_search =
+                Search_Queue.front();
+
+        Http_Request.makeRequest(current_search, result_list);
+
+        List_Object->clearList();
+
         Search_Queue.pop();
+
+        for(int i=0; i<result_list.size(); i++)
+            Log_View->appendText(result_list.at(i));
+
+        progress_box.setPersentage((double)i/queue_size);
     }
+
+    ui->start_button->setChecked(false);
+    Log_View->show();
 
 }
 
@@ -123,6 +144,18 @@ void SearchWindow::openUrlListFileButtonClicked()
     FileLog *file_log = new FileLog(open, search_window, this);
 
     file_log->show();
+}
+
+
+
+void SearchWindow::lockInterface(bool Value)
+{
+    ui->url_add_button->setDisabled(Value);
+    ui->look_logs_button->setDisabled(Value);
+    ui->clear_list_button->setDisabled(Value);
+
+    ui->start_button->setDisabled(Value);
+    ui->open_list_button->setDisabled(Value);
 }
 
 

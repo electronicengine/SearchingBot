@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1099</width>
-    <height>874</height>
+    <width>752</width>
+    <height>1114</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -524,7 +524,7 @@ border-image: url(:/images/file_pressed.png);
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1099</width>
+     <width>752</width>
      <height>24</height>
     </rect>
    </property>
