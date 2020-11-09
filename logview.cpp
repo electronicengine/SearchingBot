@@ -15,16 +15,19 @@
 #include "logview.h"
 #include "ui_logview.h"
 
+
+
 LogView::LogView(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::LogView)
 {
     ui->setupUi(this);
 
-    ui->quickWidget->setSource(QUrl("qrc:/LogArea.qml"));
+//    ui->quickWidget->setSource(QUrl("qrc:/LogArea.qml"));
 
     connect(ui->save_button, SIGNAL(clicked()), this, SLOT(saveButtonClicked()));
     connect(ui->open_button, SIGNAL(clicked()), this, SLOT(openButtonClicked()));
+    connect(this, SIGNAL(appendTextQueue(QString)), ui->plainTextEdit, SLOT(appendPlainText(QString)), Qt::QueuedConnection);
 
 }
 
@@ -39,10 +42,12 @@ LogView::~LogView()
 void LogView::appendText(const QString &Txt)
 {
 
-    QObject *rect = ui->quickWidget->rootObject()->findChild<QObject*>("textarea");
+    emit appendTextQueue(Txt);
 
-    QMetaObject::invokeMethod(rect, "append",
-                              Q_ARG(QString, Txt));
+//    QObject *rect = ui->quickWidget->rootObject()->findChild<QObject*>("textarea");
+
+//    QMetaObject::invokeMethod(rect, "append",
+//                              Q_ARG(QString, Txt));
 }
 
 
@@ -51,10 +56,12 @@ QString LogView::getAllText()
 {
     QString returnedValue;
 
-    QObject *rect = ui->quickWidget->rootObject()->findChild<QObject*>("textarea");
+//    QObject *rect = ui->quickWidget->rootObject()->findChild<QObject*>("textarea");
 
-    QMetaObject::invokeMethod(rect, "getAllText",
-            Q_RETURN_ARG(QString, returnedValue));
+//    QMetaObject::invokeMethod(rect, "getAllText",
+//            Q_RETURN_ARG(QString, returnedValue));
+
+    returnedValue = ui->plainTextEdit->toPlainText();
 
     return returnedValue;
 }
@@ -74,9 +81,11 @@ void LogView::openFileCallBack(const QString &Content)
 
 void LogView::clearText()
 {
-    QObject *rect = ui->quickWidget->rootObject()->findChild<QObject*>("textarea");
+//    QObject *rect = ui->quickWidget->rootObject()->findChild<QObject*>("textarea");
 
-    QMetaObject::invokeMethod(rect, "clear");
+//    QMetaObject::invokeMethod(rect, "clear");
+
+    ui->plainTextEdit->clear();
 }
 
 

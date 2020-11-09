@@ -51,7 +51,7 @@ QString QmlListObject::getItem(int Index)
 
 void QmlListObject::eraseItem(int Index)
 {
-
+    (void)Index;
 }
 
 

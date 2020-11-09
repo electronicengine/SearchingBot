@@ -1,4 +1,5 @@
 #include <QDir>
+#include <iostream>
 #include <QStandardPaths>
 #include <logview.h>
 #include <searchwindow.h>
@@ -82,13 +83,12 @@ void FileLog::okButtonClicked()
                while (!in.atEnd())
                {
                   url_list.append(in.readLine());
-
-                  search_window->searchUrlListFileOpenCallBack(url_list);
                }
+               search_window->searchUrlListFileOpenCallBack(url_list);
+
                inputFile.close();
             }
-        }
-    }
+        }    }
 
     deleteLater();
 }
@@ -139,6 +139,7 @@ void FileLog::listFiles()
 
     QString writable = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 
+    std::cout << writable.toStdString() << std::endl;
     QDir directory(writable);
     QStringList file_names = directory.entryList(QStringList() << "*" ,QDir::Files);
 

@@ -1,4 +1,5 @@
-QT       += core gui charts network quickwidgets qml androidextras
+QT       += core gui charts network quickwidgets qml
+#androidextras
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -18,8 +19,8 @@ SOURCES += \
         qmllistitem.cpp \
         qmllistobject.cpp \
         searchprocessbox.cpp \
-        searchwindow.cpp \
-        threadpool.cpp
+        searchqueueworker.cpp \
+        searchwindow.cpp
 
 HEADERS += \
     bot.h \
@@ -29,8 +30,8 @@ HEADERS += \
     qmllistitem.h \
     qmllistobject.h \
     searchprocessbox.h \
-    searchwindow.h \
-    threadpool.h
+    searchqueueworker.h \
+    searchwindow.h
 
 ANDROID_EXTRA_LIBS += \
     /home/yusuf/Android/Sdk/android_openssl/latest/arm64/libcrypto_1_1.so \

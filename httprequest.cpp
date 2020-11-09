@@ -11,9 +11,8 @@
 
 
 
-HttpRequest::HttpRequest(QObject *parent)
-    : QObject(parent)
-    , reply(nullptr)
+HttpRequest::HttpRequest() :
+      reply(nullptr)
     , httpRequestAborted(false)
     , httpRequestFinished(false)
 {
@@ -21,13 +20,13 @@ HttpRequest::HttpRequest(QObject *parent)
 //    Search_Window = Window;
 
 
-    connect(&qnam, &QNetworkAccessManager::authenticationRequired,
-            this, &HttpRequest::slotAuthenticationRequired);
+//    connect(&qnam, &QNetworkAccessManager::authenticationRequired,
+//            this, &HttpRequest::slotAuthenticationRequired);
 
-#ifndef QT_NO_SSL
-    connect(&qnam, &QNetworkAccessManager::sslErrors,
-            this, &HttpRequest::sslErrors);
-#endif
+//#ifndef QT_NO_SSL
+//    connect(&qnam, &QNetworkAccessManager::sslErrors,
+//            this, &HttpRequest::sslErrors);
+//#endif
 
 
 }
@@ -78,83 +77,83 @@ void HttpRequest::makeRequest(std::vector<QString> Request, QStringList &ResultL
 
 
 
-void HttpRequest::cancelDownload()
-{
+//void HttpRequest::cancelDownload()
+//{
 
-}
+//}
 
 
 
-void HttpRequest::httpFinished()
-{
+//void HttpRequest::httpFinished()
+//{
 
-    if (httpRequestAborted) {
-        reply->deleteLater();
-        reply = nullptr;
-        return;
-    }
+//    if (httpRequestAborted) {
+//        reply->deleteLater();
+//        reply = nullptr;
+//        return;
+//    }
 
-    if (reply->error()) {
-        reply->deleteLater();
-        reply = nullptr;
-        return;
-    }
+//    if (reply->error()) {
+//        reply->deleteLater();
+//        reply = nullptr;
+//        return;
+//    }
 
-    const QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
+//    const QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
 
-    reply->deleteLater();
-    reply = nullptr;
+//    reply->deleteLater();
+//    reply = nullptr;
 
-    if (!redirectionTarget.isNull()) {
-        const QUrl redirectedUrl = QUrl(Request_[0]).resolved(redirectionTarget.toUrl());
+//    if (!redirectionTarget.isNull()) {
+//        const QUrl redirectedUrl = QUrl(Request_[0]).resolved(redirectionTarget.toUrl());
 
-        Request_[0] = redirectedUrl.toString();
+//        Request_[0] = redirectedUrl.toString();
 
-//        makeRequest(Request_);
-        return;
-    }
-    else
-    {
+////        makeRequest(Request_);
+//        return;
+//    }
+//    else
+//    {
 
-    }
+//    }
 
-}
+//}
 
-void HttpRequest::httpReadyRead()
-{
-    // this slot gets called every time the QNetworkReply has new data.
-    // We read all of its new data and write it into the file.
-    // That way we use less RAM than when reading it at the finished()
-    // signal of the QNetworkReply
-//    Content_ += reply->readAll();
-}
+//void HttpRequest::httpReadyRead()
+//{
+//    // this slot gets called every time the QNetworkReply has new data.
+//    // We read all of its new data and write it into the file.
+//    // That way we use less RAM than when reading it at the finished()
+//    // signal of the QNetworkReply
+////    Content_ += reply->readAll();
+//}
 
-void HttpRequest::enableDownloadButton()
-{
-}
+//void HttpRequest::enableDownloadButton()
+//{
+//}
 
-void HttpRequest::slotAuthenticationRequired(QNetworkReply *, QAuthenticator *authenticator)
-{
+//void HttpRequest::slotAuthenticationRequired(QNetworkReply *, QAuthenticator *authenticator)
+//{
 
-    (void)authenticator;
+//    (void)authenticator;
 
-    // Did the URL have information? Fill the UI
-    // This is only relevant if the URL-supplied credentials were wrong
+//    // Did the URL have information? Fill the UI
+//    // This is only relevant if the URL-supplied credentials were wrong
 
-}
+//}
 
-#ifndef QT_NO_SSL
-void HttpRequest::sslErrors(QNetworkReply *, const QList<QSslError> &errors)
-{
-    QString errorString;
-    for (const QSslError &error : errors)
-    {
-        if (!errorString.isEmpty())
-            errorString += '\n';
-        errorString += error.errorString();
-    }
+//#ifndef QT_NO_SSL
+//void HttpRequest::sslErrors(QNetworkReply *, const QList<QSslError> &errors)
+//{
+//    QString errorString;
+//    for (const QSslError &error : errors)
+//    {
+//        if (!errorString.isEmpty())
+//            errorString += '\n';
+//        errorString += error.errorString();
+//    }
 
-    reply->ignoreSslErrors();
+//    reply->ignoreSslErrors();
 
-}
-#endif
+//}
+//#endif

@@ -25,27 +25,26 @@ class SearchWindow;
 
 
 
-class HttpRequest : public QObject
+class HttpRequest
 {
-    Q_OBJECT
+//    Q_OBJECT
 
 public:
-    explicit HttpRequest(QObject *parent = nullptr);
+    HttpRequest();
 
     void makeRequest(std::vector<QString> Request, QStringList &ResultList);
+//private slots:
+//    void cancelDownload();
+//    void httpFinished();
+//    void httpReadyRead();
+//    void enableDownloadButton();
+//    void slotAuthenticationRequired(QNetworkReply *, QAuthenticator *authenticator);
+//#ifndef QT_NO_SSL
+//    void sslErrors(QNetworkReply *, const QList<QSslError> &errors);
+//#endif
 
-private slots:
-    void cancelDownload();
-    void httpFinished();
-    void httpReadyRead();
-    void enableDownloadButton();
-    void slotAuthenticationRequired(QNetworkReply *, QAuthenticator *authenticator);
-#ifndef QT_NO_SSL
-    void sslErrors(QNetworkReply *, const QList<QSslError> &errors);
-#endif
-
-signals:
-    void requestResult(const QString &Content);
+//signals:
+//    void requestResult(const QString &Content);
 
 private:
 

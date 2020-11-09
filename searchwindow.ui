@@ -368,10 +368,10 @@ border-image: url(:/images/delete_pressed.png);
 margin-right:300px;</string>
         </property>
         <property name="maximum">
-         <number>50</number>
+         <number>10</number>
         </property>
         <property name="value">
-         <number>50</number>
+         <number>10</number>
         </property>
        </widget>
       </item>

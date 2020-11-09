@@ -24,6 +24,9 @@ public slots:
     void saveButtonClicked();
     void openButtonClicked();
 
+signals:
+    void appendTextQueue(QString Txt);
+
 private:
     Ui::LogView *ui;
 };

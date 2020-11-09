@@ -8,7 +8,9 @@
 #include <QQuickItem>
 #include <QMetaObject>
 #include <QDebug>
-#include <QtAndroid>
+#include <functional>
+#include <searchqueueworker.h>
+//#include <QtAndroid>
 #include "searchwindow.h"
 #include "httprequest.h"
 #include "filelog.h"
@@ -21,20 +23,20 @@ SearchWindow::SearchWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    auto  result = QtAndroid::checkPermission(QString("android.permission.READ_EXTERNAL_STORAGE"));
-        if(result == QtAndroid::PermissionResult::Denied){
-            QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync(QStringList({"android.permission.READ_EXTERNAL_STORAGE"}));
-            if(resultHash["android.permission.READ_EXTERNAL_STORAGE"] == QtAndroid::PermissionResult::Denied)
-                qDebug() << "permission denied read";
+//    auto  result = QtAndroid::checkPermission(QString("android.permission.READ_EXTERNAL_STORAGE"));
+//        if(result == QtAndroid::PermissionResult::Denied){
+//            QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync(QStringList({"android.permission.READ_EXTERNAL_STORAGE"}));
+//            if(resultHash["android.permission.READ_EXTERNAL_STORAGE"] == QtAndroid::PermissionResult::Denied)
+//                qDebug() << "permission denied read";
 
-        }
+//        }
 
-    result = QtAndroid::checkPermission(QString("android.permission.WRITE_EXTERNAL_STORAGE"));
-        if(result == QtAndroid::PermissionResult::Denied){
-            QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync(QStringList({"android.permission.WRITE_EXTERNAL_STORAGE"}));
-            if(resultHash["android.permission.WRITE_EXTERNAL_STORAGE"] == QtAndroid::PermissionResult::Denied)
-                qDebug() << "permission denied write";
-        }
+//    result = QtAndroid::checkPermission(QString("android.permission.WRITE_EXTERNAL_STORAGE"));
+//        if(result == QtAndroid::PermissionResult::Denied){
+//            QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync(QStringList({"android.permission.WRITE_EXTERNAL_STORAGE"}));
+//            if(resultHash["android.permission.WRITE_EXTERNAL_STORAGE"] == QtAndroid::PermissionResult::Denied)
+//                qDebug() << "permission denied write";
+//        }
 
 
     Log_View = new LogView();
@@ -44,7 +46,7 @@ SearchWindow::SearchWindow(QWidget *parent) :
     connect(ui->look_logs_button, SIGNAL(clicked()), this, SLOT(showLogButtonClicked()));
     connect(ui->url_add_button, SIGNAL(clicked()), this, SLOT(addListButtonClicked()));
     connect(ui->clear_list_button, SIGNAL(clicked()), this, SLOT(clearButtonClicked()));
-    connect(ui->start_button, SIGNAL(toggled(bool)), this, SLOT(startButtonClicked()));
+    connect(ui->start_button, SIGNAL(toggled(bool)), this, SLOT(startButtonToggled(bool)));
     connect(ui->open_list_button, SIGNAL(clicked()), this, SLOT(openUrlListFileButtonClicked()));
 
 
@@ -103,39 +105,7 @@ void SearchWindow::clearButtonClicked()
 
 
 
-void SearchWindow::startButtonClicked()
-{
 
-    SearchProcessBox progress_box;
-
-    HttpRequest Http_Request;
-    int queue_size = Search_Queue.size();
-
-    progress_box.show();
-
-    for(int i=0; i<(int)queue_size; i++)
-    {
-        QStringList result_list;
-
-        std::vector<QString> &current_search =
-                Search_Queue.front();
-
-        Http_Request.makeRequest(current_search, result_list);
-
-        List_Object->clearList();
-
-        Search_Queue.pop();
-
-        for(int i=0; i<result_list.size(); i++)
-            Log_View->appendText(result_list.at(i));
-
-        progress_box.setPersentage((double)i/queue_size);
-    }
-
-    ui->start_button->setChecked(false);
-    Log_View->show();
-
-}
 
 
 
@@ -203,4 +173,71 @@ void SearchWindow::searchUrlListFileOpenCallBack(const QStringList &UrlList)
             }
         }
     }
+}
+
+
+void SearchWindow::startButtonToggled(bool Value)
+{
+
+
+    if(Value == true)
+    {
+        Thread_Pool.setMaxThreadCount(ui->thread_number->value());
+
+        Queue_Size = Search_Queue.size();
+
+
+        Progress_Bar = new SearchProcessBox;
+        Progress_Bar->show();
+
+        for(int i=0; i<(int)Queue_Size; i++)
+        {
+
+            std::vector<QString> &current_search =
+                    Search_Queue.front();
+            SearchQueueWorker *worker = new SearchQueueWorker(i, current_search, this);
+            worker->setAutoDelete(true);
+
+            Thread_Pool.start(worker);
+            Search_Queue.pop();
+
+        }
+
+
+        Log_View->show();
+    }
+
+}
+
+
+
+void SearchWindow::searchResultCallBackFunction(const QStringList &ResultList)
+{
+
+    std::unique_lock<std::mutex> ul(Mutex_);
+
+
+    static int complated_queue_counter = 0;
+    complated_queue_counter++;
+
+    Progress_Bar->show();
+
+    Progress_Bar->setPersentage((double)complated_queue_counter/Queue_Size);
+
+    Log_View->appendText("\n******************************************************************************************************");
+    Log_View->appendText("***********************************Search Result Seperator**********************************************");
+    Log_View->appendText("******************************************************************************************************\n");
+
+    foreach (QString line, ResultList)
+    {
+        Log_View->appendText(line);
+    }
+
+    if((double)complated_queue_counter/Queue_Size == 1)
+    {
+        ui->start_button->setChecked(false);
+        Queue_Size = 0;
+        delete Progress_Bar;
+    }
+
 }
