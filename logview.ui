@@ -34,10 +34,15 @@ GridLayout{backgroundColor: transparent;}
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QPlainTextEdit" name="plainTextEdit">
-     <property name="styleSheet">
-      <string notr="true">background-color: #272d2f;
-</string>
+    <widget class="QQuickWidget" name="quickWidget">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="resizeMode">
+      <enum>QQuickWidget::SizeRootObjectToView</enum>
      </property>
     </widget>
    </item>
@@ -177,6 +182,13 @@ border-image: url(:/images/file_pressed.png);
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QQuickWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">QtQuickWidgets/QQuickWidget</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

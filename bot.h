@@ -12,9 +12,10 @@ class Bot
 public:
     Bot();
     void searchPrefix(QString &Content, QString &Prefix, QString &BanPrefix, QStringList &ResultList);
+    int searchText(QString &Content, std::vector<QString> &Prefixes, std::vector<QString> &Ban_Prefix,
+                    std::vector<QStringList> &ResultList);
 
 private:
-    std::vector<std::pair<QString, QString>> Begin_End_Prefixes;
     std::vector<std::pair<QString, char>> Prefix_Pieces;
     QString Ban_Prefix;
 
@@ -27,6 +28,18 @@ private:
     QStringList *Founded_Words;
 
 
+   /*********************************************************************************/
+    QString Current_Search_Text;
+    QStringList Complete_Search_Texts;
+    std::vector<QString> New_Created_Prefixes;
+    std::vector<QString> Variable_Prefixes;
+    std::vector<QStringList> Variable_Texts;
+    int Current_Prefix_Number;
+
+
+    int defineTextVariables(std::vector<QString>Search_Prefixes);
+    void searchCompleteText();
+    void makeMainPrefixSearch(QString &Content, QString &Main_Prefix, QString &BanPrefix, QStringList &ResultList);
 };
 
 

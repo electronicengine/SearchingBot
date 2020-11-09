@@ -51,7 +51,7 @@ GridLayout{backgroundColor: transparent;}
 </string>
       </property>
       <property name="text">
-       <string>&lt;a href=&quot;/diseases-conditions*syc*&gt;#&lt;/a&gt;</string>
+       <string>&lt;a href=&quot;/diseases-conditions*syc*&gt;#1&lt;/a&gt;, &lt;a href=&quot;#2&gt;#1&lt;/a&gt;</string>
       </property>
      </widget>
     </item>

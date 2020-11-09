@@ -10,11 +10,13 @@
 #include <QDebug>
 #include <functional>
 #include <searchqueueworker.h>
+#include <iostream>
 //#include <QtAndroid>
 #include "searchwindow.h"
 #include "httprequest.h"
 #include "filelog.h"
 #include "searchprocessbox.h"
+#include "loging.h"
 #include "ui_searchwindow.h"
 
 SearchWindow::SearchWindow(QWidget *parent) :
@@ -145,6 +147,8 @@ void SearchWindow::searchUrlListFileOpenCallBack(const QStringList &UrlList)
                           QString("\nSearch Prefix: ") + search_prefix +
                           QString("\nDelete Prefix: ") + ban_prefix);
 
+            File_Input_List.push_back(UrlList.at(i));
+
             Search_Queue.push(std::vector<QString>({UrlList.at(i), search_prefix, ban_prefix}));
 
         }
@@ -170,15 +174,17 @@ void SearchWindow::searchUrlListFileOpenCallBack(const QStringList &UrlList)
                               QString("\nDelete Prefix: ") + ban_prefix);
 
                 Search_Queue.push(std::vector<QString>({UrlList.at(i), search_prefix, ban_prefix}));
+                File_Input_List.push_back(UrlList.at(i));
+
             }
         }
     }
 }
 
 
+
 void SearchWindow::startButtonToggled(bool Value)
 {
-
 
     if(Value == true)
     {
@@ -211,11 +217,11 @@ void SearchWindow::startButtonToggled(bool Value)
 
 
 
-void SearchWindow::searchResultCallBackFunction(const QStringList &ResultList)
+void SearchWindow::searchResultCallBackFunction(const QStringList &ResultList, int QueueId)
 {
 
     std::unique_lock<std::mutex> ul(Mutex_);
-
+    QString plain_text;
 
     static int complated_queue_counter = 0;
     complated_queue_counter++;
@@ -225,16 +231,22 @@ void SearchWindow::searchResultCallBackFunction(const QStringList &ResultList)
     Progress_Bar->setPersentage((double)complated_queue_counter/Queue_Size);
 
     Log_View->appendText("\n******************************************************************************************************");
-    Log_View->appendText("***********************************Search Result Seperator**********************************************");
+    Log_View->appendText(QString::number(QueueId).rightJustified(3, '0') + "***********************************Search Result Seperator****************************************");
     Log_View->appendText("******************************************************************************************************\n");
 
+    if(Queue_Size == (int)File_Input_List.size())
+        Log_View->appendText("Query Prefix: " + File_Input_List.at(QueueId));
+
     foreach (QString line, ResultList)
-    {
-        Log_View->appendText(line);
-    }
+        plain_text += line +"\n";
+
+    Log_View->appendText(plain_text);
+
+    QThread::sleep(1);
 
     if((double)complated_queue_counter/Queue_Size == 1)
     {
+        complated_queue_counter = 0;
         ui->start_button->setChecked(false);
         Queue_Size = 0;
         delete Progress_Bar;

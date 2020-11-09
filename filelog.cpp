@@ -5,6 +5,7 @@
 #include <searchwindow.h>
 #include <QMessageBox>
 #include "filelog.h"
+#include "loging.h"
 #include "ui_filelog.h"
 
 FileLog::FileLog(OpsType Ops, MainWindowType Type, QWidget *MainWindow, QWidget *parent) :
@@ -44,6 +45,13 @@ void FileLog::okButtonClicked()
 {
 
     QString writable = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+
+    QDir dir(writable);
+    if (!dir.exists())
+    {
+        Loging::printAll(Loging::white, "directory doesn't exist!" );
+      QDir().mkdir(writable);
+    }
 
     if(Operation_Type == save)
     {
@@ -136,15 +144,12 @@ QString &FileLog::getSelectedFileContent()
 
 void FileLog::listFiles()
 {
-
     QString writable = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 
-    std::cout << writable.toStdString() << std::endl;
+    Loging::printAll(Loging::white, writable.toStdString() );
     QDir directory(writable);
     QStringList file_names = directory.entryList(QStringList() << "*" ,QDir::Files);
 
     for(int i=0; i<file_names.size(); i++)
         List_Object->addItem(file_names.at(i));
-
-
 }

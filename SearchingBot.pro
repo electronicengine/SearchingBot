@@ -12,7 +12,9 @@ CONFIG -= app_bundle
 
 SOURCES += \
         bot.cpp \
+        botunittest.cpp \
         filelog.cpp \
+        loging.cpp \
         logview.cpp \
         main.cpp \
         httprequest.cpp \
@@ -24,8 +26,10 @@ SOURCES += \
 
 HEADERS += \
     bot.h \
+    botunittest.h \
     filelog.h \
     httprequest.h \
+    loging.h \
     logview.h \
     qmllistitem.h \
     qmllistobject.h \

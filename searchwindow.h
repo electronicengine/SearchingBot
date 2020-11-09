@@ -26,7 +26,7 @@ public:
 
     void appendUrlList(const QString &Str);
     void searchUrlListFileOpenCallBack(const QStringList &UrlList);
-    void searchResultCallBackFunction(const QStringList &ResultList);
+    void searchResultCallBackFunction(const QStringList &ResultList, int QueueId);
 
 private slots:
     void showLogButtonClicked();
@@ -42,6 +42,7 @@ private:
     std::shared_ptr<QmlListObject> List_Object;
     SearchProcessBox *Progress_Bar;
     std::queue<std::vector<QString>> Search_Queue;
+    std::vector<QString> File_Input_List;
     HttpRequest Http_Request;
     QThreadPool Thread_Pool;
     std::mutex Mutex_;

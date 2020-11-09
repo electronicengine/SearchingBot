@@ -7,6 +7,7 @@
 #include "httprequest.h"
 #include "logview.h"
 #include "searchwindow.h"
+#include "loging.h"
 
 
 
