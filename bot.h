@@ -41,6 +41,7 @@ private:
     int makeBeginPrefix(QString &Content);
     int makeEndPrefix(QString &Content);
     int deleteBanPrefix(QString &Content);
+    int makeConstantSearch(QString &Content);
     QString findInvalidPrefixText(int Index, QString &Content);
 
 };

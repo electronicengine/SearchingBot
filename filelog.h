@@ -2,6 +2,8 @@
 #define FILELOG_H
 
 #include <QWidget>
+#include <functional>
+#include <memory>
 #include "qmllistobject.h"
 
 enum OpsType

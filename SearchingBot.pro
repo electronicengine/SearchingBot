@@ -1,7 +1,7 @@
 QT       += core gui charts network quickwidgets qml
 #androidextras
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets core gui charts network quickwidgets qml
 
 CONFIG += c++14 console
 CONFIG -= app_bundle
