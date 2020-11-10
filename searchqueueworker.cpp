@@ -6,7 +6,7 @@
 
 
 
-SearchQueueWorker::SearchQueueWorker(int QueueNumber, std::vector<QString> &Search, SearchWindow *ReturnObj) :
+SearchQueueWorker::SearchQueueWorker(int QueueNumber, std::vector<QStringList> &Search, SearchWindow *ReturnObj) :
                     Queue_Number(QueueNumber), Search_(Search), Return_Object(ReturnObj){}
 
 
@@ -14,10 +14,12 @@ SearchQueueWorker::SearchQueueWorker(int QueueNumber, std::vector<QString> &Sear
 void SearchQueueWorker::run()
 {
 
+    for(int i=0; i<Search_[1].size(); i++)   // as much as search prefix size
+        Search_Result.push_back(QStringList());
+
     Loging::printAll(Loging::white, "The worker: ", Queue_Number," is working ");
-    Http_Request.makeRequest(Search_, Search_Result);
+    Search_Engine.searchRequest(Search_, Search_Result);
 
     Return_Object->searchResultCallBackFunction(Search_Result, Queue_Number);
-
 
 }

@@ -8,7 +8,7 @@
 #include <queue>
 #include "logview.h"
 #include "qmllistobject.h"
-#include "httprequest.h"
+#include "searchengine.h"
 #include "searchprocessbox.h"
 
 
@@ -26,7 +26,8 @@ public:
 
     void appendUrlList(const QString &Str);
     void searchUrlListFileOpenCallBack(const QStringList &UrlList);
-    void searchResultCallBackFunction(const QStringList &ResultList, int QueueId);
+    void searchResultCallBackFunction(const std::vector<QStringList> &ResultList, int QueueId);
+    void appendSearchList(const QString &UrlList, const QString &PrefixList, const QString &BanList);
 
 private slots:
     void showLogButtonClicked();
@@ -35,15 +36,15 @@ private slots:
     void startButtonToggled(bool Value);
     void openUrlListFileButtonClicked();
 
+
 private:
     Ui::SearchWindow *ui;
 
     LogView *Log_View;
     std::shared_ptr<QmlListObject> List_Object;
     SearchProcessBox *Progress_Bar;
-    std::queue<std::vector<QString>> Search_Queue;
+    std::queue<std::vector<QStringList>> Search_Queue;
     std::vector<QString> File_Input_List;
-    HttpRequest Http_Request;
     QThreadPool Thread_Pool;
     std::mutex Mutex_;
     void lockInterface(bool Value);

@@ -18,11 +18,11 @@ int main(int argc, char *argv[])
 
     Loging::enableLogs();
 
-//    SearchWindow *search_window = new SearchWindow;
+    SearchWindow *search_window = new SearchWindow;
 
-//    search_window->show();
+    search_window->show();
 
-    BotUnitTest test;
+//    BotUnitTest test;
 
     return a.exec();
 }

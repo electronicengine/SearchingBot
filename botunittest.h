@@ -16,9 +16,9 @@ public:
 
 
 
-    std::vector<QString> Search_Prefixes;
-    std::vector<QString> Ban_List;
-    std::vector<QString> Test_Content;
+    QStringList Search_Prefixes;
+    QStringList Ban_List;
+    QStringList Test_Content;
     std::vector<QStringList> Result_List;
 
 };

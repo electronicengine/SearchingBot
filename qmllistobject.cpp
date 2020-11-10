@@ -51,7 +51,8 @@ QString QmlListObject::getItem(int Index)
 
 void QmlListObject::eraseItem(int Index)
 {
-    (void)Index;
+   Item_List.erase(Item_List.begin() + Index);
+   Widget_->rootContext()->setContextProperty("myModel", QVariant::fromValue(Item_List));
 }
 
 

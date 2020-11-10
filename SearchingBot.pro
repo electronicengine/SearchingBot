@@ -17,9 +17,9 @@ SOURCES += \
         loging.cpp \
         logview.cpp \
         main.cpp \
-        httprequest.cpp \
         qmllistitem.cpp \
         qmllistobject.cpp \
+        searchengine.cpp \
         searchprocessbox.cpp \
         searchqueueworker.cpp \
         searchwindow.cpp
@@ -28,11 +28,11 @@ HEADERS += \
     bot.h \
     botunittest.h \
     filelog.h \
-    httprequest.h \
     loging.h \
     logview.h \
     qmllistitem.h \
     qmllistobject.h \
+    searchengine.h \
     searchprocessbox.h \
     searchqueueworker.h \
     searchwindow.h

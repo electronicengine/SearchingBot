@@ -4,19 +4,19 @@
 #include <QThread>
 #include <QRunnable>
 
-#include "httprequest.h"
+#include "searchengine.h"
 
 class SearchQueueWorker : public QRunnable
 {
 
     int Queue_Number;
-    HttpRequest Http_Request;
-    std::vector<QString> Search_;
-    QStringList Search_Result;
+    SearchEngine Search_Engine;
+    std::vector<QStringList> Search_;
+    std::vector<QStringList> Search_Result;
     SearchWindow *Return_Object;
 
 public:
-    SearchQueueWorker(int QueueNumber, std::vector<QString> &Search, SearchWindow *ReturnObj);
+    SearchQueueWorker(int QueueNumber, std::vector<QStringList> &Search, SearchWindow *ReturnObj);
 
     void run();
 };
