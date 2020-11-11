@@ -150,7 +150,25 @@ int Bot::parsePrefix(QString &Prefix)
             Loging::printAll(Loging::yellow, "piece: " , Prefix.left(index).toStdString());
             if(index == valid_prefix_index)
             {
-                Prefix_Pieces.push_back(std::make_pair(Prefix.left(index), '#'));
+
+                if(index == 0) // if there is nothing before #
+                {
+                    Loging::printAll(Loging::yellow, "there is nothing before # ");
+
+                    Prefix_Pieces.push_back(std::make_pair(" ", '#'));
+                }
+                else if(index == Prefix.size() - 1) // if there is nothing after #
+                {
+                    Loging::printAll(Loging::yellow, "there is nothing after #");
+                    Prefix_Pieces.push_back(std::make_pair(Prefix.left(index), '#'));
+
+                    Prefix_Pieces.push_back(std::make_pair(" ", '-'));
+                    break;
+                }
+                {
+                    Prefix_Pieces.push_back(std::make_pair(Prefix.left(index), '#'));
+                }
+
             }
             if(index == invalid_prefix_index)
             {
@@ -253,10 +271,12 @@ int Bot::makeBeginPrefix(QString &Content)
              }
         }
 
-        for(int i=0; i< (int)Prefix_Pieces.size(); i++)
+        //if begin prefix is empty
+        if(begin_prefix == " " || begin_prefix == "")
         {
-            Loging::printAll(Loging::cyan, "");
+            break;
         }
+
         Loging::printAll(Loging::cyan, " ************************");
         Loging::printAll(Loging::cyan, "Begin Prefix: " , begin_prefix.toStdString());
         Loging::printAll(Loging::cyan, " ************************");
@@ -325,27 +345,24 @@ int Bot::makeEndPrefix(QString &Content)
     Loging::printAll(Loging::cyan, "End Prefix: " , end_prefix.toStdString());
     Loging::printAll(Loging::cyan, " -----------------------");
 
+
     searched_text = Content.left(Content.indexOf(end_prefix));
 
-    Current_Search_Text +=searched_text;
+    if(!Ban_Prefixes.empty())
+        deleteBanPrefix(searched_text);
+
+    Current_Search_Text += searched_text;
     Current_Search_Text += end_prefix;
 
-    deleteBanPrefix(Current_Search_Text);
+    //cut the content
+    Content = Content.mid(Content.indexOf(end_prefix) +  + end_prefix.size());
+    Loging::printAll(Loging::cyan, "Last Content: ", Content.toStdString());
+
 
     if(Current_Prefix_Number == 0)
         Complete_Search_Texts.push_back(Current_Search_Text);
 
-
-    if(!Ban_Prefixes.empty())
-    {
-        deleteBanPrefix(searched_text);
-    }
-
-    if(Mode_ == variable_search)
-        Founded_Words->append(searched_text);
-    else if(Mode_ == constant_search)
-        Founded_Words->append(Complete_Search_Texts);
-
+    Founded_Words->append(searched_text);
 
     return 0;
 }
@@ -407,29 +424,58 @@ int Bot::deleteBanPrefix(QString &Content)
 int Bot::makeConstantSearch(QString &Content)
 {
 
-    if(Prefix_Pieces.size() <= 1)
-        return -1;
+    QString searched_text;
+    int initial_search_index;
 
-    int longest_prefix_index = 0;
-    int prefix_lenght = 0;
-    Loging::printAll(Loging::magenta, "Prefix_Pieces;");
-    QString begin_prefix = Prefix_Pieces[0].first;
-    QString end_prefix = Prefix_Pieces[Prefix_Pieces.size() - 1].first;
-
-    // find longest prefix
-    for(int i=0; i< (int)Prefix_Pieces.size(); i++)
+    while(1)
     {
-        Loging::printAll(Loging::magenta, Prefix_Pieces[i].first.toStdString());
 
-        if(prefix_lenght < Prefix_Pieces[i].first.size())
+        //search first prefix
+        initial_search_index = Content.indexOf(Prefix_Pieces[0].first);
+        if(initial_search_index < 0)
+            return 0;
+
+        // add first piece of prefix to begin prefix
+        searched_text += Prefix_Pieces[0].first;
+
+        for(int i=0; i< (int)Prefix_Pieces.size() -  1; i++)
         {
-            prefix_lenght = Prefix_Pieces[i].first.size();
-            longest_prefix_index = i;
+
+             searched_text += findInvalidPrefixText(Prefix_Pieces[i].first, Prefix_Pieces[i+1].first, Content);
+             Loging::printAll(Loging::cyan, "Searched Keyword " , searched_text.toStdString());
         }
+
+
+        //if begin prefix is empty
+        if(searched_text == " " || searched_text == "" || searched_text == Prefix_Pieces[0].first ||
+                searched_text == Prefix_Pieces[0].first + " ")
+        {
+            break;
+        }
+
+        Loging::printAll(Loging::cyan, " ************************");
+        Loging::printAll(Loging::cyan, "Founded Prefix: " , searched_text.toStdString());
+        Loging::printAll(Loging::cyan, " ************************");
+
+        //cut off content until known valid begin prefix
+        Content = Content.mid(Content.indexOf(searched_text) + searched_text.size());
+
+        if(!Ban_Prefixes.empty())
+        {
+            deleteBanPrefix(searched_text);
+        }
+
+        Loging::printAll(Loging::cyan, "Last Content: ", Content.toStdString());
+
+        if(Current_Prefix_Number == 0)
+            Complete_Search_Texts.push_back(searched_text);
+
+        Founded_Words->append(searched_text);
+
+        searched_text.clear();
     }
 
-    Content.indexOf(Prefix_Pieces[longest_prefix_index].first);
-
+    return 0;
 
 
 }
@@ -481,9 +527,13 @@ QString Bot::findInvalidPrefixText(const QString &Search_Begin, const QString &S
         // check if there is begin prefix witout end prefix
         int search_begin_size = Search_Begin.size();
         int temp_index;
+        QString last_temp;
+
+        last_temp = temp_search_end.mid(search_begin_index + search_begin_size);
 
         do
         {
+
 
             if(temp_search_end.indexOf(Search_End) <= search_begin_index)
                 break;
@@ -503,13 +553,20 @@ QString Bot::findInvalidPrefixText(const QString &Search_Begin, const QString &S
 
         }while(temp_index >= 0);
 
-        //if there is no begin prefix, then search another end prefix
+
+        //check if there is any same end prefix at the total
+
+        temp_search_end = temp_search_end.simplified();
+
+        int a = last_temp.indexOf(temp_search_end, 0);
+        if(a == 0)
+            temp_search_end = last_temp.mid(temp_index);
 
 
 
         //extract valid prefix with begin and end prefix
-//        search_end = temp_search_end.mid(search_begin_index + search_begin.size());
         Loging::printAll(Loging::white, "search_end: " , temp_search_end.toStdString());
+        Loging::printAll(Loging::white, "Last-temp: " , last_temp.toStdString());
 
         return temp_search_end;
 

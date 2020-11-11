@@ -8,18 +8,25 @@
 BotUnitTest::BotUnitTest()
 {
 
-    Search_Prefixes.push_back("<a href=\"/diseases-conditions*syc*>#1</a>");
-    Search_Prefixes.push_back("<a href=\"#2>#1</a>");
-    Search_Prefixes.push_back("<a#3=\"#2>#1</a>");
+    Search_Prefixes.push_back("ac*sis");
+//    Search_Prefixes.push_back("*antho*");
+//    Search_Prefixes.push_back("sis*");
 
+//    Search_Prefixes.push_back("*a href=\"https://www.mayoclinic.org/diseases-conditions*syc*>#1</a*");
+//    Search_Prefixes.push_back("<a href=\"#2>#1</a>");
+//    Search_Prefixes.push_back("<a#3=\"#2>#1</a>");
+//    Search_Prefixes.push_back("<a href=\"https://*/diseases-conditions/achalasia/symptoms-causes/syc-20352850\">#1");
+//    Search_Prefixes.push_back("#1href=\"https://*/diseases-conditions/achalasia/symptoms-causes/syc-20352850");
 
     Ban_List.push_back("<span*</span>");
 
     Test_Content.push_back(readInputTest());
 
+    Loging::printAll(Loging::white, Test_Content.at(0).toStdString());
+
     Result_List.push_back(QStringList());
-    Result_List.push_back(QStringList());
-    Result_List.push_back(QStringList());
+//    Result_List.push_back(QStringList());
+//    Result_List.push_back(QStringList());
 
     QString content = Test_Content.at(0);
 
@@ -27,12 +34,12 @@ BotUnitTest::BotUnitTest()
 
     Loging::printAll(Loging::magenta, "Total Result Table: ");
 
-    for(int i=0; Result_List[0].size(); i++)
+    for(int i=0; Result_List.at(0).size(); i++)
     {
 
-            Loging::printAll(Loging::magenta, Result_List[0].at(i).toStdString(), "\t\t",
+            Loging::printAll(Loging::magenta, Result_List.at(0).at(i).toStdString()/*, "\t\t",
                     Result_List[1].at(i).toStdString(),"\t\t",
-                    Result_List[2].at(i).toStdString());
+                    Result_List[2].at(i).toStdString()*/);
 
     }
 
