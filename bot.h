@@ -34,7 +34,6 @@ private:
     int Current_Prefix_Number;
     SearchMod Mode_;
 
-
     int defineTextVariables(QStringList Search_Prefixes);
     void makeMainPrefixSearch(QString &Content, QString &Main_Prefix, QStringList &ResultList);
     int parsePrefix(QString &Prefix);
@@ -42,7 +41,7 @@ private:
     int makeEndPrefix(QString &Content);
     int deleteBanPrefix(QString &Content);
     int makeConstantSearch(QString &Content);
-    QString findInvalidPrefixText(int Index, QString &Content);
+    QString findInvalidPrefixText(const QString &Begin, const QString &End, QString &Content);
 
 };
 

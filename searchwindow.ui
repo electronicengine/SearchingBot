@@ -93,7 +93,7 @@ GridLayout{backgroundColor: transparent;}
 </string>
       </property>
       <property name="text">
-       <string>file://external/home/yusuf/Documents/Workspace/qt-workspace/build-SearchingBot-Desktop_Qt_5_15_1_GCC_64bit-Debug/test</string>
+       <string>file://external/home/yusuf/Documents/workspace/build-SearchingBot-Desktop_Qt_5_15_1_GCC_64bit-Debug/test</string>
       </property>
      </widget>
     </item>
