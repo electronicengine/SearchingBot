@@ -55,48 +55,12 @@ void FileLog::okButtonClicked()
 
     if(Operation_Type == save)
     {
-
-        QFile file(writable + "/" + ui->file_name->text());
-
-        if(file.open(QIODevice::WriteOnly | QIODevice::Text))
-        {
-          // We're going to streaming text to the file
-          QTextStream stream(&file);
-
-          stream << dynamic_cast<LogView *>(Main_Window)->getAllText();
-
-          file.close();
-        }
-
-        QMessageBox::information(this, "File Save", "File Saved");
-
+        fileSaveOperation();
     }
     else if(Operation_Type == open)
     {
-        if(MainWindow_Type == log_view)
-        {
-            LogView *log_view = dynamic_cast<LogView *>(Main_Window);
-
-            log_view->openFileCallBack(getSelectedFileContent());
-
-        }
-        else if(MainWindow_Type == search_window)
-        {
-            SearchWindow * search_window =  dynamic_cast<SearchWindow *>(Main_Window);
-            QStringList url_list;
-            QFile inputFile(writable + "/" + List_Object->getCurrentItemText());
-            if (inputFile.open(QIODevice::ReadOnly))
-            {
-               QTextStream in(&inputFile);
-               while (!in.atEnd())
-               {
-                  url_list.append(in.readLine());
-               }
-               search_window->searchUrlListFileOpenCallBack(url_list);
-
-               inputFile.close();
-            }
-        }    }
+        fileOpenOperation();
+    }
 
     deleteLater();
 }
@@ -108,7 +72,7 @@ void FileLog::deleteButtonClicked()
     QString writable = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     QString file_name = List_Object->getCurrentItemText();
 
-    QFile file (writable + "/" + file_name);
+    QFile file(writable + "/" + file_name);
     file.remove();
 
     List_Object->clearList();
@@ -117,6 +81,81 @@ void FileLog::deleteButtonClicked()
 
     QMessageBox::information(this, "Delete File", "File is Deleted!");
 
+}
+
+
+
+void FileLog::fileOpenOperation()
+{
+    QString writable = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+
+
+    if(MainWindow_Type == log_view)
+    {
+        LogView *log_view = dynamic_cast<LogView *>(Main_Window);
+
+        log_view->openFileCallBack(getSelectedFileContent());
+
+    }
+    else if(MainWindow_Type == search_window)
+    {
+        SearchWindow * search_window =  dynamic_cast<SearchWindow *>(Main_Window);
+        QStringList url_list;
+        QFile inputFile(writable + "/" + List_Object->getCurrentItemText());
+        if (inputFile.open(QIODevice::ReadOnly))
+        {
+           QTextStream in(&inputFile);
+           while (!in.atEnd())
+           {
+              url_list.append(in.readLine());
+           }
+           search_window->searchUrlListFileOpenCallBack(url_list);
+
+           inputFile.close();
+        }
+    }
+}
+
+
+
+void FileLog::fileSaveOperation()
+{
+
+    QString writable = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+
+
+    QFile file(writable + "/" + ui->file_name->text());
+
+    if(file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+      // We're going to streaming text to the file
+      QTextStream stream(&file);
+
+      stream << dynamic_cast<LogView *>(Main_Window)->getAllText();
+
+      file.close();
+    }
+
+    QMessageBox::information(this, "File Save", "File Saved");
+}
+
+
+
+std::vector<QStringList> FileLog::getCategorizedContent()
+{
+    std::vector<QStringList> categorized_data;
+    QStringList temp;
+
+    temp = Content.split("||");
+
+    for(int i=0; i < temp.size(); i++)
+    {
+        if(i&2 == 0)
+        temp.
+    }
+
+
+
 
 }
 
@@ -124,7 +163,6 @@ void FileLog::deleteButtonClicked()
 
 QString &FileLog::getSelectedFileContent()
 {
-
 
     QString writable = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 

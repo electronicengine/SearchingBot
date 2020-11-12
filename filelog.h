@@ -34,6 +34,9 @@ public:
 private slots:
     void okButtonClicked();
     void deleteButtonClicked();
+    void fileOpenOperation();
+    void fileSaveOperation();
+    std::vector<QStringList> getCategorizedContent();
 
 
 private:

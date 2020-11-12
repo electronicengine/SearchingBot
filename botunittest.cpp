@@ -9,12 +9,7 @@
 BotUnitTest::BotUnitTest()
 {
 
-    createTestCase({"*a href=\"https://www.mayoclinic.org/diseases-conditions*syc*>#1<*>"},
-                   {"<span*</span>"},
-                   {{"Acanthosis nigricans",
-                     "Achalasia",
-                     "Achilles tendinitis",
-                     "Achilles tendon rupture"}});
+
     testOldCases();
     printTotalResults();
 
@@ -189,7 +184,12 @@ void BotUnitTest::testOldCases()
                    {"<span*</span>"},
                    {{"<a"}});
 
-
+    createTestCase({"*a href=\"https://www.mayoclinic.org/diseases-conditions*syc*>#1<*>"},
+                   {"<span*</span>"},
+                   {{"Acanthosis nigricans",
+                     "Achalasia",
+                     "Achilles tendinitis",
+                     "Achilles tendon rupture"}});
 
     Loging::enableLogs();
 }
