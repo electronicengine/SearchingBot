@@ -25,7 +25,7 @@ public:
     ~SearchWindow();
 
     void appendUrlList(const QString &Str);
-    void searchUrlListFileOpenCallBack(const QStringList &UrlList);
+    void searchUrlListFileOpenCallBack(const std::vector<QStringList> &FileList);
     void searchResultCallBackFunction(const std::vector<QStringList> &ResultList, int QueueId);
     void appendSearchList(const QString &UrlList, const QString &PrefixList, const QString &BanList);
 

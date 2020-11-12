@@ -25,6 +25,7 @@ LogView::LogView(QWidget *parent) :
 
     ui->quickWidget->setSource(QUrl("qrc:/LogArea.qml"));
 
+    connect(ui->clear_button, SIGNAL(clicked(bool)), this, SLOT(clearButtonClicked()));
     connect(ui->save_button, SIGNAL(clicked()), this, SLOT(saveButtonClicked()));
     connect(ui->open_button, SIGNAL(clicked()), this, SLOT(openButtonClicked()));
 //    connect(this, SIGNAL(appendTextQueue(QString)), ui->plainTextEdit, SLOT(appendPlainText(QString)), Qt::QueuedConnection);
@@ -56,10 +57,10 @@ QString LogView::getAllText()
 {
     QString returnedValue;
 
-//    QObject *rect = ui->quickWidget->rootObject()->findChild<QObject*>("textarea");
+    QObject *rect = ui->quickWidget->rootObject()->findChild<QObject*>("textarea");
 
-//    QMetaObject::invokeMethod(rect, "getAllText",
-//            Q_RETURN_ARG(QString, returnedValue));
+    QMetaObject::invokeMethod(rect, "getAllText",
+            Q_RETURN_ARG(QString, returnedValue));
 
 //    returnedValue = ui->plainTextEdit->toPlainText();
 
@@ -81,9 +82,9 @@ void LogView::openFileCallBack(const QString &Content)
 
 void LogView::clearText()
 {
-//    QObject *rect = ui->quickWidget->rootObject()->findChild<QObject*>("textarea");
+    QObject *rect = ui->quickWidget->rootObject()->findChild<QObject*>("textarea");
 
-//    QMetaObject::invokeMethod(rect, "clear");
+    QMetaObject::invokeMethod(rect, "clear");
 
 //    ui->plainTextEdit->clear();
 }
@@ -106,4 +107,11 @@ void LogView::openButtonClicked()
 
     file_log->show();
 
+}
+
+
+
+void LogView::clearButtonClicked()
+{
+    clearText();
 }

@@ -128,53 +128,45 @@ void SearchWindow::lockInterface(bool Value)
 
 
 
-void SearchWindow::searchUrlListFileOpenCallBack(const QStringList &UrlList)
+void SearchWindow::searchUrlListFileOpenCallBack(const std::vector<QStringList> &FileList)
 {
-    const QStringList &url = ui->search_url->text().split(",");
-    const QStringList &search_prefix = ui->search_prefix->text().split(",");
-    const QStringList &ban_prefix = ui->ban_prefix->text().split(",");
-    int prefix_index = url.at(0).indexOf('*');
 
-    if(prefix_index < 0)  // no prefix
+    QString url = ui->search_url->text();
+    QString search_prefix = ui->search_prefix->text();
+    QString ban_prefix = ui->ban_prefix->text();
+    QString temp_url ;
+    QString temp_search_prefix;
+    QString temp_ban_prefix;
+    std::vector<QString> keywords;
+
+    //create keywords
+
+    if(FileList.size() <= 0)
     {
-        for(int i = 0; i < UrlList.size(); i++)
+        QMessageBox::information(this, "error", "there is no data in file");
+        return;
+    }
+
+    for(int i=0; i< (int)FileList.size(); i++)
+        keywords.push_back("[" + QString::number(i+1) + "]");
+
+    for(int k=0; k < FileList[0].size(); k++)
+    {
+        temp_url = url;
+        temp_search_prefix = search_prefix;
+        temp_ban_prefix = ban_prefix;
+
+        for(int i=0; i < (int)keywords.size(); i++)
         {
-//            appendUrlList(QString("Search Url: ") + ui->search_url->text()  +
-//                          QString("\nSearch Prefix: ") + ui->search_prefix->text() +
-//                          QString("\nDelete Prefix: ") + ui->ban_prefix->text());
-
-//            File_Input_List.push_back(UrlList.at(i));
-
-//            Search_Queue.push(std::vector<QStringList>({UrlList, search_prefix, ban_prefix}));
-
+            temp_url.replace(keywords[i], FileList[i].at(k));
+            temp_search_prefix.replace(keywords[i], FileList[i].at(k));
+            temp_ban_prefix.replace(keywords[i], FileList[i].at(k));
         }
+
+        appendSearchList(temp_url, temp_search_prefix, temp_ban_prefix);
     }
-    else
-    {
-//        QStringList url_pieces = url.split('*');
 
-//        if(url_pieces.size() != 2)
-//        {
-//            QMessageBox::information(this, "Error", "Url Prefix must be has one * prefix!");
-//        }
-//        else
-//        {
-//            url.clear();
 
-//            for(int i=0; i<UrlList.size(); i++)
-//            {
-//                url = url_pieces.at(0) + UrlList.at(i) + url_pieces.at(1);
-
-//                appendUrlList(QString("Search Url: ") + url  +
-//                              QString("\nSearch Prefix: ") + search_prefix +
-//                              QString("\nDelete Prefix: ") + ban_prefix);
-
-//                Search_Queue.push(std::vector<QString>({UrlList.at(i), search_prefix, ban_prefix}));
-//                File_Input_List.push_back(UrlList.at(i));
-
-//            }
-//        }
-    }
 }
 
 

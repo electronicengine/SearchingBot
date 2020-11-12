@@ -23,6 +23,7 @@ public:
 public slots:
     void saveButtonClicked();
     void openButtonClicked();
+    void clearButtonClicked();
 
 signals:
     void appendTextQueue(QString Txt);

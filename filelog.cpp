@@ -87,8 +87,6 @@ void FileLog::deleteButtonClicked()
 
 void FileLog::fileOpenOperation()
 {
-    QString writable = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-
 
     if(MainWindow_Type == log_view)
     {
@@ -100,19 +98,10 @@ void FileLog::fileOpenOperation()
     else if(MainWindow_Type == search_window)
     {
         SearchWindow * search_window =  dynamic_cast<SearchWindow *>(Main_Window);
-        QStringList url_list;
-        QFile inputFile(writable + "/" + List_Object->getCurrentItemText());
-        if (inputFile.open(QIODevice::ReadOnly))
-        {
-           QTextStream in(&inputFile);
-           while (!in.atEnd())
-           {
-              url_list.append(in.readLine());
-           }
-           search_window->searchUrlListFileOpenCallBack(url_list);
 
-           inputFile.close();
-        }
+        search_window->searchUrlListFileOpenCallBack(getCategorizedContent());
+
+
     }
 }
 
@@ -144,19 +133,41 @@ void FileLog::fileSaveOperation()
 std::vector<QStringList> FileLog::getCategorizedContent()
 {
     std::vector<QStringList> categorized_data;
-    QStringList temp;
 
-    temp = Content.split("||");
+    QString writable = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QString file_name = List_Object->getCurrentItemText();
 
-    for(int i=0; i < temp.size(); i++)
+    QFile inputFile(writable + "/" + file_name);
+    QString line;
+    QStringList temp_list;
+
+    if (inputFile.open(QIODevice::ReadOnly))
     {
-        if(i&2 == 0)
-        temp.
+       QTextStream in(&inputFile);
+       while (!in.atEnd())
+       {
+
+          temp_list = in.readLine().split("\t");
+
+          if(temp_list.size() > (int)categorized_data.size())
+          {
+              for(int i=0; i<temp_list.size(); i++)
+                    categorized_data.push_back(QStringList());
+          }
+
+          for(int i=0; i<temp_list.size(); i++)
+              categorized_data.at(i).append(temp_list.at(i).simplified());
+
+          temp_list.clear();
+
+       }
+
+       inputFile.close();
     }
 
 
 
-
+    return categorized_data;
 }
 
 
