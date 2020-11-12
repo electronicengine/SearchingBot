@@ -282,6 +282,7 @@ int Bot::makeBeginPrefix(QString &Content)
             break;
 
 
+
         Loging::printAll(Loging::cyan, " ************************");
         Loging::printAll(Loging::cyan, "Begin Prefix: " , begin_prefix.toStdString());
         Loging::printAll(Loging::cyan, " ************************");
@@ -292,6 +293,23 @@ int Bot::makeBeginPrefix(QString &Content)
         Content = Content.mid(begin_prefix_index + begin_prefix.size());
 
         Loging::printAll(Loging::white, "Cont: " , Content.toStdString());
+
+
+        bool correct_prefix = true;
+        //check all prefix pieces is including
+        for(int i=0; i<Prefix_Pieces.size(); i++)
+        {
+            if(Prefix_Pieces[i].second == '#')
+                break;
+
+            if(begin_prefix.indexOf(Prefix_Pieces[i].first) < 0)
+            {
+                correct_prefix = false;
+            }
+        }
+
+        if(correct_prefix == false)
+            break;
 
         //find the end prefix
         makeEndPrefix(begin_prefix, Content);
@@ -360,6 +378,20 @@ int Bot::makeEndPrefix(QString &BeginPrefix, QString &Content)
     {
         searched_text = Content.left(Content.indexOf(end_prefix));
     }
+
+
+    //check all prefix pieces is including
+    for(int i=Prefix_Pieces.size() - 1; i >= 0; i--)
+    {
+        if(Prefix_Pieces[i].second == '#')
+            break;
+
+        if(end_prefix.indexOf(Prefix_Pieces[i].first) < 0)
+        {
+            return -1;
+        }
+    }
+
 
     if(!Ban_Prefixes.empty())
         deleteBanPrefix(searched_text);

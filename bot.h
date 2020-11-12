@@ -43,6 +43,7 @@ private:
     int makeConstantSearch(QString &Content);
     QString findInvalidPrefixText(const QString &Begin, const QString &End, QString &Content);
 
+
 };
 
 

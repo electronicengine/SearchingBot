@@ -21,6 +21,12 @@ Item
                     anchors.fill: parent
                     color: "#272d2f"
                 }
+                MouseArea
+                {
+                    anchors.fill: parent
+                    cursorShape: Qt.IBeamCursor
+                    acceptedButtons: Qt.NoButton
+                }
 
                 objectName: "textarea"
                 color: "#67cbef"

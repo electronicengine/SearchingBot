@@ -37,5 +37,7 @@
         <file>images/save_pressed.png</file>
         <file>images/file_unpressed.png</file>
         <file>images/file_pressed.png</file>
+        <file>images/searchingbot.png</file>
+        <file>AndroidManifest.xml</file>
     </qresource>
 </RCC>

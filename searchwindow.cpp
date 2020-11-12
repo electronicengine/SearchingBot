@@ -166,7 +166,6 @@ void SearchWindow::searchUrlListFileOpenCallBack(const std::vector<QStringList> 
         appendSearchList(temp_url, temp_search_prefix, temp_ban_prefix);
     }
 
-
 }
 
 
@@ -174,7 +173,7 @@ void SearchWindow::searchUrlListFileOpenCallBack(const std::vector<QStringList> 
 void SearchWindow::startButtonToggled(bool Value)
 {
 
-    if(Value == true)
+    if(Value == true && Search_Queue.size() != 0)
     {
         Thread_Pool.setMaxThreadCount(ui->thread_number->value());
 
@@ -219,9 +218,9 @@ void SearchWindow::searchResultCallBackFunction(const std::vector<QStringList> &
 
     Progress_Bar->setPersentage((double)complated_queue_counter/Queue_Size);
 
-    Log_View->appendText("\n******************************************************************************************************");
-    Log_View->appendText(QString::number(QueueId).rightJustified(3, '0') + "***********************************Search Result Seperator****************************************");
-    Log_View->appendText("******************************************************************************************************\n");
+//    Log_View->appendText("\n******************************************************************************************************");
+//    Log_View->appendText(QString::number(QueueId).rightJustified(3, '0') + "***********************************Search Result Seperator****************************************");
+//    Log_View->appendText("******************************************************************************************************\n");
 
     if(Queue_Size == (int)File_Input_List.size())
         Log_View->appendText("Query Prefix: " + File_Input_List.at(QueueId));

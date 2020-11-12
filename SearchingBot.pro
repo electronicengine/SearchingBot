@@ -63,7 +63,11 @@ FORMS += \
 RESOURCES += \
     resource.qrc
 
+ANDROID_PACKAGE_SOURCE_DIR = /home/yusuf/Documents/Workspace/qt-workspace/SearchingBot
+
+
 DISTFILES += \
+    AndroidManifest.xml \
     images/add_pressed.png \
     images/add_unpressed.png \
     images/delete_pressed.png \
@@ -82,7 +86,9 @@ DISTFILES += \
     images/refresh_unpressed.png \
     images/right_pressed.png \
     images/right_unpressed.png \
+    images/searchingbot.png \
     images/show_pressed.png \
+    images/searchingbot.png \
     images/show_unpressed.png \
     images/start_pressed.png \
     images/start_unpressed.png \
@@ -95,3 +101,5 @@ DISTFILES += \
     images/up_unpressed.png \
     images/wifi_locked.png \
     images/wifi_unlocked.png
+
+ANDROID_ABIS = armeabi-v7a
