@@ -14,16 +14,16 @@
 
 int main(int argc, char *argv[])
 {
-//    QApplication a(argc, argv);
-
-//    Loging::enableLogs();
-
-//    SearchWindow *search_window = new SearchWindow;
-
-//    search_window->show();
 
     BotUnitTest test;
 
-    return 0;
-//    return a.exec();
+    QApplication a(argc, argv);
+
+    Loging::enableLogs();
+
+    SearchWindow *search_window = new SearchWindow;
+
+    search_window->show();
+
+    return a.exec();
 }

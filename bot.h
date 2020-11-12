@@ -36,9 +36,9 @@ private:
 
     int defineTextVariables(QStringList Search_Prefixes);
     void makeMainPrefixSearch(QString &Content, QString &Main_Prefix, QStringList &ResultList);
-    int parsePrefix(QString &Prefix);
+    int parsePrefix(QString &Prefix, std::vector<std::pair<QString, char>> &Parsed);
     int makeBeginPrefix(QString &Content);
-    int makeEndPrefix(QString &Content);
+    int makeEndPrefix(QString &BeginPrefix, QString &Content);
     int deleteBanPrefix(QString &Content);
     int makeConstantSearch(QString &Content);
     QString findInvalidPrefixText(const QString &Begin, const QString &End, QString &Content);
