@@ -296,13 +296,16 @@ int Bot::makeBeginPrefix(QString &Content)
 
 
         bool correct_prefix = true;
+
+
         //check all prefix pieces is including
-        for(int i=0; i<Prefix_Pieces.size(); i++)
+        for(int i=0; i<(int)Prefix_Pieces.size(); i++)
         {
             if(Prefix_Pieces[i].second == '#')
                 break;
 
-            if(begin_prefix.indexOf(Prefix_Pieces[i].first) < 0)
+            if(begin_prefix.indexOf(Prefix_Pieces[i].first) < 0 &&
+                    !(begin_prefix == " " || begin_prefix == ""))
             {
                 correct_prefix = false;
             }
@@ -386,7 +389,8 @@ int Bot::makeEndPrefix(QString &BeginPrefix, QString &Content)
         if(Prefix_Pieces[i].second == '#')
             break;
 
-        if(end_prefix.indexOf(Prefix_Pieces[i].first) < 0)
+        if(end_prefix.indexOf(Prefix_Pieces[i].first) < 0 &&
+                !(end_prefix == " " || end_prefix == ""))
         {
             return -1;
         }

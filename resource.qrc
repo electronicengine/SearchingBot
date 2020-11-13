@@ -37,7 +37,10 @@
         <file>images/save_pressed.png</file>
         <file>images/file_unpressed.png</file>
         <file>images/file_pressed.png</file>
-        <file>images/searchingbot.png</file>
         <file>AndroidManifest.xml</file>
+        <file>images/searchingbot.png</file>
+        <file>images/cover-vertical.png</file>
+        <file>images/cover-horizontal.png</file>
+        <file>images/cover_h480.png</file>
     </qresource>
 </RCC>

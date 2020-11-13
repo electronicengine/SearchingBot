@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="resource.qrc">
+    <normaloff>:/images/searchingbot.png</normaloff>:/images/searchingbot.png</iconset>
+  </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(46, 52, 54);
 color: rgb(114, 159, 207);
@@ -58,6 +62,8 @@ GridLayout{backgroundColor: transparent;}
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="resource.qrc"/>
+ </resources>
  <connections/>
 </ui>
