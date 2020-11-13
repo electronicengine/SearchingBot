@@ -2,6 +2,9 @@ I developed the this SearchingBot App to find the specific data from web and cat
 
 I have written the app in Qt-C++ and a little bit Qml.  You can compile it for Windows, Linux, Mac, Android and also ios.  I have tested on Android and Linux.
 
+You can find the usage info from this link; http://yusufbulbul.com/2020/11/13/searchingbot/
+
+
 App Usage:
 
 The search prefix is the descriptor of the desired data.  It can be html tag, link or any of descriptor of data. The two types of prefix;
