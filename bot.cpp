@@ -2,10 +2,7 @@
 #include "loging.h"
 #include <iostream>
 
-Bot::Bot()
-{
-
-}
+Bot::Bot(){}
 
 
 
