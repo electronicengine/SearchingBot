@@ -11,7 +11,7 @@
 #include <functional>
 #include <searchqueueworker.h>
 #include <iostream>
-#include <QtAndroid>
+//#include <QtAndroid>
 #include "searchwindow.h"
 #include "searchengine.h"
 #include "filelog.h"
@@ -25,20 +25,20 @@ SearchWindow::SearchWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    auto  result = QtAndroid::checkPermission(QString("android.permission.READ_EXTERNAL_STORAGE"));
-        if(result == QtAndroid::PermissionResult::Denied){
-            QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync(QStringList({"android.permission.READ_EXTERNAL_STORAGE"}));
-            if(resultHash["android.permission.READ_EXTERNAL_STORAGE"] == QtAndroid::PermissionResult::Denied)
-                qDebug() << "permission denied read";
+//    auto  result = QtAndroid::checkPermission(QString("android.permission.READ_EXTERNAL_STORAGE"));
+//        if(result == QtAndroid::PermissionResult::Denied){
+//            QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync(QStringList({"android.permission.READ_EXTERNAL_STORAGE"}));
+//            if(resultHash["android.permission.READ_EXTERNAL_STORAGE"] == QtAndroid::PermissionResult::Denied)
+//                qDebug() << "permission denied read";
 
-        }
+//        }
 
-    result = QtAndroid::checkPermission(QString("android.permission.WRITE_EXTERNAL_STORAGE"));
-        if(result == QtAndroid::PermissionResult::Denied){
-            QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync(QStringList({"android.permission.WRITE_EXTERNAL_STORAGE"}));
-            if(resultHash["android.permission.WRITE_EXTERNAL_STORAGE"] == QtAndroid::PermissionResult::Denied)
-                qDebug() << "permission denied write";
-        }
+//    result = QtAndroid::checkPermission(QString("android.permission.WRITE_EXTERNAL_STORAGE"));
+//        if(result == QtAndroid::PermissionResult::Denied){
+//            QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync(QStringList({"android.permission.WRITE_EXTERNAL_STORAGE"}));
+//            if(resultHash["android.permission.WRITE_EXTERNAL_STORAGE"] == QtAndroid::PermissionResult::Denied)
+//                qDebug() << "permission denied write";
+//        }
 
 
     Log_View = new LogView();

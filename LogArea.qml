@@ -42,7 +42,10 @@ Item
             bottomPadding: 0
             selectByMouse: false
 
-
+            function getAllText() : string
+            {
+                return textArea.text
+            }
 
         }
 

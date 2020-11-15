@@ -1,4 +1,5 @@
-QT       += core gui charts network quickwidgets qml androidextras
+QT       += core gui charts network quickwidgets qml
+#androidextras
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets core gui charts network quickwidgets qml
 
@@ -62,7 +63,7 @@ FORMS += \
 RESOURCES += \
     resource.qrc
 
-ANDROID_PACKAGE_SOURCE_DIR = /home/yusuf/Documents/workspace/SearchingBot
+#ANDROID_PACKAGE_SOURCE_DIR = /home/yusuf/Documents/workspace/SearchingBot
 
 
 DISTFILES += \
@@ -102,3 +103,8 @@ DISTFILES += \
     images/wifi_unlocked.png
 
 ANDROID_ABIS = armeabi-v7a
+
+contains(ANDROID_TARGET_ARCH,) {
+    ANDROID_ABIS = \
+        armeabi-v7a
+}

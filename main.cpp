@@ -18,6 +18,7 @@ int main(int argc, char *argv[])
 
     BotUnitTest test;
 
+    Loging::disableLogs();
     QApplication a(argc, argv);
 
     QPixmap pixmap(":/images/cover-h480.png");
