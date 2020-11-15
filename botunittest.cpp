@@ -217,6 +217,24 @@ void BotUnitTest::testOldCases()
                      "Achilles tendinitis",
                      "Achilles tendon rupture"}});
 
+    createTestCase({"*n Sperate Prefix{<a href=\"https://www.mayoclinic.org/diseases-conditions*syc*>#1</a>}Close Sperate *"},
+                   {"<span*myc*</span>"},
+                   {{"Acanthosis nigricans",
+                    "Achalasia",
+                    "Achilles tendinitis"}});
+
+    createTestCase({"Open*Prefix{<a href=\"https://www.mayoclinic.org/diseases-conditions*syc*>#1</a>}Close Sperate Prefix"},
+                   {"<span*myc*</span>"},
+                   {{"Acanthosis nigricans",
+                    "Achalasia",
+                    "Achilles tendinitis"}});
+
+    createTestCase({"Open Sperate Prefix{<a href=\"https://www.mayoclinic.org/diseases-conditions*syc*>#1</a>}Close Sperate Prefix"},
+                   {"<span*myc*</span>"},
+                   {{"Acanthosis nigricans",
+                    "Achalasia",
+                    "Achilles tendinitis"}});
+
     Loging::enableLogs();
 }
 

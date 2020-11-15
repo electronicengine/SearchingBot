@@ -16,7 +16,6 @@ void Bot::searchPrefix(QString &Content, QString &Prefix, QStringList &ResultLis
 
     parsePrefix(Prefix, Prefix_Pieces);
 
-
     Mode_ = constant_search;
 
     Loging::printAll(Loging::yellow, "Prefix Pieces:");
@@ -52,6 +51,8 @@ int Bot::searchText(QString &Content, QStringList &Prefixes, QStringList &BanPre
     int res;
 
     if(Prefixes.size() <= 0) return -1;
+
+    checkSperatePrefix(Prefixes, Content);
 
     QString main_prefix = Prefixes[0];
 
@@ -232,6 +233,128 @@ int Bot::parsePrefix(QString &Prefix, std::vector<std::pair<QString, QChar>> &Pa
 
 
 
+void Bot::checkSperatePrefix(QStringList &Prefix, QString  &Content)
+{
+
+    for(int i=0; i<Prefix.size(); i++)
+    {
+        int open_sperated_prefix_index = Prefix[i].indexOf(SPERATE_PREFIX_OPEN);
+        int close_sperated_prefix_index = Prefix[i].indexOf(SPERATE_PREFIX_CLOSE);
+
+        if(open_sperated_prefix_index >= 0)
+        {
+            Open_Sperate_Prefix = Prefix[i].left(open_sperated_prefix_index);
+
+            cutContentFromOpenSperate(Open_Sperate_Prefix, Content);
+
+            Prefix[i].replace(Open_Sperate_Prefix + SPERATE_PREFIX_OPEN, "");
+            close_sperated_prefix_index = close_sperated_prefix_index - Open_Sperate_Prefix.size() - 1;
+
+        }
+
+        if(close_sperated_prefix_index >= 0)
+        {
+            Close_Sperate_Prefix = Prefix[i].mid(close_sperated_prefix_index + 1);
+
+            cutContentFromCloseSperate(Close_Sperate_Prefix, Content);
+
+            Prefix[i].replace(SPERATE_PREFIX_CLOSE + Close_Sperate_Prefix, "");
+
+        }
+    }
+
+
+
+
+}
+
+
+
+void Bot::cutContentFromOpenSperate(QString &OpenSperatePrefix, QString &Content)
+{
+    if(OpenSperatePrefix.indexOf(INVALID_PREFIX) >= 0)
+    {
+        QStringList pieces = OpenSperatePrefix.split(INVALID_PREFIX);
+        QString complate_prefix = complateSearchPrefix(pieces, Content);
+
+        int index = Content.indexOf(complate_prefix);
+
+        if(index >= 0)
+        {
+            Content = Content.mid(index + complate_prefix.size());
+
+        }
+    }
+    else
+    {
+        int index = Content.indexOf(OpenSperatePrefix);
+
+        if(index >= 0)
+        {
+           Content = Content.mid(index + OpenSperatePrefix.size());
+        }
+    }
+
+}
+
+
+
+void Bot::cutContentFromCloseSperate(QString &CloseSperatePrefix, QString &Content)
+{
+    if(CloseSperatePrefix.indexOf(INVALID_PREFIX) >= 0)
+    {
+        QStringList pieces = CloseSperatePrefix.split(INVALID_PREFIX);
+        QString complate_prefix = complateSearchPrefix(pieces, Content);
+
+        int index = Content.indexOf(complate_prefix);
+
+        if(index >= 0)
+        {
+            Content = Content.left(index);
+
+        }
+    }
+    else
+    {
+        int index = Content.indexOf(CloseSperatePrefix);
+
+        if(index >= 0)
+        {
+           Content = Content.left(index);
+        }
+    }
+}
+
+
+
+QString Bot::complateSearchPrefix(QStringList &PrefixPieces, QString &Content)
+{
+
+    QString complete_text;
+
+    complete_text += PrefixPieces.at(0);
+
+    for(int i = 0; i<PrefixPieces.size() - 1; i++)
+    {
+        QString begin_prefix = PrefixPieces.at(i);
+        if(begin_prefix == "")
+            begin_prefix = " ";
+
+        QString end_prefix = PrefixPieces.at(i+1);
+        if(end_prefix == "")
+            end_prefix = " ";
+
+        complete_text += findInvalidPrefixText(begin_prefix, end_prefix, Content);
+
+    }
+
+    return complete_text;
+
+
+}
+
+
+
 int Bot::makeBeginPrefix(QString &Content)
 {
     QString begin_prefix;
@@ -259,9 +382,7 @@ int Bot::makeBeginPrefix(QString &Content)
              }
              else if(Prefix_Pieces[i].second == VALID_PREFIX)
              {
-
                 break;
-
              }
         }
 
@@ -439,25 +560,9 @@ int Bot::deleteBanPrefix(QString &Content)
         }
         else
         {
-            QStringList ban_prefix_pieces = Ban_Prefixes[i].split(INVALID_PREFIX);
-            QString complete_ban_text;
+            QStringList prefix_pieces = Ban_Prefixes[i].split(INVALID_PREFIX);
 
-            complete_ban_text += ban_prefix_pieces.at(0);
-
-            for(int i = 0; i<ban_prefix_pieces.size() - 1; i++)
-            {
-                QString begin_prefix = ban_prefix_pieces.at(i);
-                if(begin_prefix == "")
-                    begin_prefix = " ";
-
-                QString end_prefix = ban_prefix_pieces.at(i+1);
-                if(end_prefix == "")
-                    end_prefix = " ";
-
-                complete_ban_text += findInvalidPrefixText(begin_prefix, end_prefix, Content);
-
-            }
-
+            QString complete_ban_text = complateSearchPrefix(prefix_pieces, Content);
 
             Loging::printAll(Loging::red, "Complete Ban Text: ", complete_ban_text.toStdString());
 
@@ -466,8 +571,6 @@ int Bot::deleteBanPrefix(QString &Content)
 
 
             Loging::printAll(Loging::yellow, "Cleared Content: ", Content.toStdString());
-
-
 
         }
     }
@@ -483,23 +586,20 @@ int Bot::makeConstantSearch(QString &Content)
 
     while(1)
     {
-
         //search first prefix
         initial_search_index = Content.indexOf(Prefix_Pieces[0].first);
         if(initial_search_index < 0)
             return 0;
 
-        // add first piece of prefix to begin prefix
-        if(Prefix_Pieces[0].first != " ")
-            searched_text += Prefix_Pieces[0].first;
 
+        QStringList pieces_list;
 
-        for(int i=0; i< (int)Prefix_Pieces.size() -  1; i++)
+        for(int i=0; i< (int)Prefix_Pieces.size(); i++)
         {
-
-             searched_text += findInvalidPrefixText(Prefix_Pieces[i].first, Prefix_Pieces[i+1].first, Content);
-             Loging::printAll(Loging::cyan, "Searched Keyword " , searched_text.toStdString());
+            pieces_list.append(Prefix_Pieces[i].first);
         }
+
+        searched_text = complateSearchPrefix(pieces_list, Content);
 
 
         //if begin prefix is empty
