@@ -19,6 +19,8 @@
 #include "loging.h"
 #include "ui_searchwindow.h"
 
+
+
 SearchWindow::SearchWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::SearchWindow)
@@ -100,10 +102,6 @@ void SearchWindow::clearButtonClicked()
     for(int i=0; i<(int)Search_Queue.size(); i++)
         Search_Queue.pop();
 }
-
-
-
-
 
 
 

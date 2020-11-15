@@ -8,7 +8,6 @@ Bot::Bot()
 
 
 
-
 void Bot::searchPrefix(QString &Content, QString &Prefix, QStringList &ResultList)
 {
 
@@ -34,8 +33,6 @@ void Bot::searchPrefix(QString &Content, QString &Prefix, QStringList &ResultLis
         Loging::printAll(Loging::magenta, "This search is variable_search");
     else
         Loging::printAll(Loging::magenta, "This search is constant_search");
-
-
 
 
     if(Mode_ == variable_search)
@@ -117,14 +114,12 @@ int Bot::searchText(QString &Content, QStringList &Prefixes, QStringList &BanPre
 
         Loging::printAll(Loging::green, "new_search results: ");
 
-        foreach (QString var, ResultList[Current_Prefix_Number]) {
+        foreach (QString var, ResultList[Current_Prefix_Number])
+        {
             Loging::printAll(Loging::green, var.toStdString());
         }
 
-
         Current_Prefix_Number++;
-
-
     }
 
     return 0;
@@ -282,7 +277,6 @@ int Bot::makeBeginPrefix(QString &Content)
             break;
 
 
-
         Loging::printAll(Loging::cyan, " ************************");
         Loging::printAll(Loging::cyan, "Begin Prefix: " , begin_prefix.toStdString());
         Loging::printAll(Loging::cyan, " ************************");
@@ -298,7 +292,7 @@ int Bot::makeBeginPrefix(QString &Content)
         bool correct_prefix = true;
 
 
-        //check all prefix pieces is including
+        //check if begin prefix is including all prefix pieces
         for(int i=0; i<(int)Prefix_Pieces.size(); i++)
         {
             if(Prefix_Pieces[i].second == '#')
@@ -426,6 +420,8 @@ int Bot::makeEndPrefix(QString &BeginPrefix, QString &Content)
 int Bot::deleteBanPrefix(QString &Content)
 {
 
+    printAll(Loging::red, "Dirty Content: ",Content.toStdString());
+
     for(int i = 0; i<(int)Ban_Prefixes.size(); i++)
     {
         int prefix_piece = Ban_Prefixes[i].indexOf("*");
@@ -442,30 +438,31 @@ int Bot::deleteBanPrefix(QString &Content)
         }
         else
         {
-            QStringList prefixes = Ban_Prefixes[i].split("*");
+            QStringList ban_prefix_pieces = Ban_Prefixes[i].split("*");
+            QString complete_ban_text;
 
-            if(prefixes.size() == 2)
+            complete_ban_text += ban_prefix_pieces.at(0);
+
+            for(int i = 0; i<ban_prefix_pieces.size() - 1; i++)
             {
-                QString begin_prefix = prefixes.at(0);
-                QString end_prefix = prefixes.at(1);
+                QString begin_prefix = ban_prefix_pieces.at(i);
+                QString end_prefix = ban_prefix_pieces.at(i+1);
 
-                Loging::printAll(Loging::red,"Ban Prefix start: ",begin_prefix.toStdString(),
-                                 " - Ban Prefix end: ", end_prefix.toStdString());
-                printAll(Loging::red, "Dirty Content: ",Content.toStdString());
+                complete_ban_text += findInvalidPrefixText(begin_prefix, end_prefix, Content);
 
-                int begin_index = Content.indexOf(begin_prefix);
-                int end_index = Content.indexOf(end_prefix);
-
-                if(end_index >= 0 && begin_index >= 0)
-                {
-                    printAll(Loging::red, "Begin Index: ", begin_index, " - End Index: ", end_index);
-                    QString complete_ban_text = Content.left(end_index + end_prefix.size()).mid(begin_index);
-                    printAll(Loging::red, "complete_ban_text", complete_ban_text.toStdString());
-
-                    Content = Content.replace(complete_ban_text, QString(""));
-                    printAll(Loging::red, "Cleared:Content: ",Content.toStdString());
-                }
             }
+
+
+            Loging::printAll(Loging::red, "Complete Ban Text: ", complete_ban_text.toStdString());
+
+            if(Content.indexOf(complete_ban_text) >= 0 )
+                Content.replace(complete_ban_text, "");
+
+
+            Loging::printAll(Loging::yellow, "Cleared Content: ", Content.toStdString());
+
+
+
         }
     }
     return 0;
@@ -612,7 +609,8 @@ QString Bot::findInvalidPrefixText(const QString &Search_Begin, const QString &S
 
         //check if there is any same end prefix at the total
 
-        temp_search_end = temp_search_end.simplified();
+        if(Search_Begin == " " || Search_End == " ")
+            temp_search_end = temp_search_end.simplified();
 
         int a = last_temp.indexOf(temp_search_end, 0);
         if(a == 0)

@@ -9,7 +9,6 @@
 BotUnitTest::BotUnitTest()
 {
 
-
     testOldCases();
     printTotalResults();
 
@@ -94,6 +93,8 @@ void BotUnitTest::createTestCase(QStringList &&SearchPrefixes, QStringList &&Ban
     }
 }
 
+
+
 void BotUnitTest::printTotalResults()
 {
 
@@ -128,6 +129,23 @@ void BotUnitTest::testOldCases()
                     "Achalasia",
                     "Achilles tendinitis",
                     "Achilles tendon rupture"}});
+
+    createTestCase({"<a href=\"https://www.mayoclinic.org/diseases-conditions*syc*>#1</a>"},
+                   {"<span*myc*</span>"},
+                   {{"Separated shoulder",
+                    "Acanthosis nigricans",
+                    "Achalasia",
+                    "Achilles tendinitis",
+                    "Achilles tendon rupture"}});
+
+    createTestCase({"<a href=\"https://www.mayoclinic.org/diseases-conditions*syc*>#1</a>"},
+                   {"<span*myc*joint*</*>"},
+                   {{"Separated shoulder",
+                    "Acanthosis nigricans",
+                    "Achalasia",
+                    "Achilles tendinitis",
+                    "Achilles tendon rupture"}});
+
 
     createTestCase({"*a href=\"https://www.mayoclinic.org/diseases-conditions*syc*>#1</a*"},
                    {"<span*</span>"},
