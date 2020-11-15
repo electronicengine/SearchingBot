@@ -9,7 +9,6 @@
 BotUnitTest::BotUnitTest()
 {
 
-
     testOldCases();
     printTotalResults();
 

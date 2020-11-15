@@ -37,7 +37,7 @@ GridLayout{backgroundColor: transparent;}
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_2">
+   <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QLabel" name="label">
       <property name="text">
@@ -55,7 +55,7 @@ GridLayout{backgroundColor: transparent;}
 </string>
       </property>
       <property name="text">
-       <string>&lt;a href=&quot;*syc*&gt;#1&lt;/a&gt;,&lt;a href=&quot;#2&gt;#1&lt;/a&gt;</string>
+       <string>&lt;h2&gt;Symptoms&lt;/h2&gt;{&lt;li&gt;#1&lt;/li&gt;}&lt;h3&gt;When to see a doctor&lt;/h3&gt;</string>
       </property>
      </widget>
     </item>
@@ -97,7 +97,28 @@ GridLayout{backgroundColor: transparent;}
 </string>
       </property>
       <property name="text">
-       <string>file://test</string>
+       <string>https://www.mayoclinic.org/diseases-conditions/abdominal-aortic-aneurysm/symptoms-causes/syc-20350688</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_5">
+      <property name="text">
+       <string>Search Header</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="search_header">
+      <property name="styleSheet">
+       <string notr="true">background-color: #272d2f;
+</string>
+      </property>
+      <property name="text">
+       <string>Test</string>
       </property>
      </widget>
     </item>

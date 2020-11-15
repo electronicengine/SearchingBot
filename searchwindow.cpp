@@ -85,11 +85,12 @@ void SearchWindow::showLogButtonClicked()
 
 void SearchWindow::addListButtonClicked()
 {
+    const QString &search_header = ui->search_header->text();
     const QString &search_url = ui->search_url->text();
     const QString &search_prefix = ui->search_prefix->text();
     const QString &ban_prefix = ui->ban_prefix->text();
 
-    appendSearchList(search_url, search_prefix, ban_prefix);
+    appendSearchList(search_url, search_prefix, ban_prefix, search_header);
 
 }
 
@@ -129,9 +130,11 @@ void SearchWindow::lockInterface(bool Value)
 void SearchWindow::searchUrlListFileOpenCallBack(const std::vector<QStringList> &FileList)
 {
 
+    QString search_header = ui->search_header->text();
     QString url = ui->search_url->text();
     QString search_prefix = ui->search_prefix->text();
     QString ban_prefix = ui->ban_prefix->text();
+    QString temp_search_header;
     QString temp_url ;
     QString temp_search_prefix;
     QString temp_ban_prefix;
@@ -150,18 +153,20 @@ void SearchWindow::searchUrlListFileOpenCallBack(const std::vector<QStringList> 
 
     for(int k=0; k < FileList[0].size(); k++)
     {
+        temp_search_header = search_header;
         temp_url = url;
         temp_search_prefix = search_prefix;
         temp_ban_prefix = ban_prefix;
 
         for(int i=0; i < (int)keywords.size(); i++)
         {
+            temp_search_header.replace(keywords[i], FileList[i].at(k));
             temp_url.replace(keywords[i], FileList[i].at(k));
             temp_search_prefix.replace(keywords[i], FileList[i].at(k));
             temp_ban_prefix.replace(keywords[i], FileList[i].at(k));
         }
 
-        appendSearchList(temp_url, temp_search_prefix, temp_ban_prefix);
+        appendSearchList(temp_url, temp_search_prefix, temp_ban_prefix, temp_search_header);
     }
 
 }
@@ -170,6 +175,7 @@ void SearchWindow::searchUrlListFileOpenCallBack(const std::vector<QStringList> 
 
 void SearchWindow::startButtonToggled(bool Value)
 {
+
 
     if(Value == true && Search_Queue.size() != 0)
     {
@@ -198,6 +204,10 @@ void SearchWindow::startButtonToggled(bool Value)
 
         Log_View->show();
     }
+    else if(Value == false)
+    {
+        Thread_Pool.clear();
+    }
 
 }
 
@@ -216,10 +226,7 @@ void SearchWindow::searchResultCallBackFunction(const std::vector<QStringList> &
 
     Progress_Bar->setPersentage((double)complated_queue_counter/Queue_Size);
 
-//    Log_View->appendText("\n******************************************************************************************************");
-//    Log_View->appendText(QString::number(QueueId).rightJustified(3, '0') + "***********************************Search Result Seperator****************************************");
-//    Log_View->appendText("******************************************************************************************************\n");
-
+    Log_View->appendText("====>" + Search_Headers[QueueId]);
     if(Queue_Size == (int)File_Input_List.size())
         Log_View->appendText("Query Prefix: " + File_Input_List.at(QueueId));
 
@@ -242,7 +249,7 @@ void SearchWindow::searchResultCallBackFunction(const std::vector<QStringList> &
         complated_queue_counter = 0;
         ui->start_button->setChecked(false);
         Queue_Size = 0;
-
+        Search_Headers.clear();
         delete Progress_Bar;
     }
 
@@ -251,7 +258,7 @@ void SearchWindow::searchResultCallBackFunction(const std::vector<QStringList> &
 
 
 
-void SearchWindow::appendSearchList(const QString &UrlList, const QString &PrefixList, const QString &BanList)
+void SearchWindow::appendSearchList(const QString &UrlList, const QString &PrefixList, const QString &BanList, const QString SearchHeader)
 {
 
     const QStringList &search_url = UrlList.split(",");
@@ -262,7 +269,8 @@ void SearchWindow::appendSearchList(const QString &UrlList, const QString &Prefi
     QStringList simplified_search_prefix;
     QStringList simplified_ban_prefix;
 
-    appendUrlList(QString("Search Url: ") + UrlList +
+    appendUrlList(QString("Search Header: ") + SearchHeader +
+                  QString("\nSearch Url: ") + UrlList +
                   QString("\nSearch Prefix: ") + PrefixList +
                   QString("\nDelete Prefix: ") + BanList);
 
@@ -286,6 +294,8 @@ void SearchWindow::appendSearchList(const QString &UrlList, const QString &Prefi
         if(var.simplified() != "")
             simplified_ban_prefix.append(var.simplified());
     }
+
+    Search_Headers.push_back(SearchHeader);
 
     Search_Queue.push(std::vector<QStringList>({simplified_search_url,
                                                 simplified_search_prefix, simplified_ban_prefix}));

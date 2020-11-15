@@ -147,7 +147,7 @@ std::vector<QStringList> FileLog::getCategorizedContent()
        while (!in.atEnd())
        {
 
-          temp_list = in.readLine().split("\t");
+          temp_list = in.readLine().split("||");
 
           if(temp_list.size() > (int)categorized_data.size())
           {
@@ -156,7 +156,10 @@ std::vector<QStringList> FileLog::getCategorizedContent()
           }
 
           for(int i=0; i<temp_list.size(); i++)
-              categorized_data.at(i).append(temp_list.at(i).simplified());
+          {
+              if(temp_list.at(i) != "" || temp_list.at(i) != " ")
+                categorized_data.at(i).append(temp_list.at(i).simplified());
+          }
 
           temp_list.clear();
 
