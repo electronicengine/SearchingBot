@@ -9,6 +9,7 @@
 BotUnitTest::BotUnitTest()
 {
 
+    createTestCase({"a*"}, {"<span*</span>"}, {{"acanthosis"}});
 
     testOldCases();
     printTotalResults();
@@ -119,6 +120,7 @@ void BotUnitTest::testOldCases()
     Loging::disableLogs();
 
     createTestCase({"ac*sis"}, {"<span*</span>"}, {{"acanthosis"}});
+
     createTestCase({"*antho*"},{"<span*</span>"},
                    {{"href=\"https://www.mayoclinic.org/diseases-conditions/acanthosis-nigricans/symptoms-causes/syc-20368983\">Acanthosis"}});
 
