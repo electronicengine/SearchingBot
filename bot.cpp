@@ -133,7 +133,7 @@ int Bot::parsePrefix(QString &Prefix, std::vector<std::pair<QString, QChar>> &Pa
     int valid_prefix_index = 0;
     int index = 0;
 
-    if(Prefix.size() <= 2)
+    if(Prefix.size() <= 1)
         return -1;
 
     //divide prefixes into an pair array to examine pieces
@@ -358,8 +358,12 @@ int Bot::makeBeginPrefix(QString &Content)
     int begin_prefix_index;
     int initial_search_index;
 
+    if(Prefix_Pieces.size() <= 0)
+        return -1;
+
     while(1)
     {
+
 
         //search first prefix
         initial_search_index = Content.indexOf(Prefix_Pieces[0].first);
@@ -581,9 +585,14 @@ int Bot::makeConstantSearch(QString &Content)
     QString searched_text;
     int initial_search_index;
 
+    if(Prefix_Pieces.size() <= 0)
+        return -1;
+
     while(1)
     {
         //search first prefix
+
+
         initial_search_index = Content.indexOf(Prefix_Pieces[0].first);
         if(initial_search_index < 0)
             return 0;
