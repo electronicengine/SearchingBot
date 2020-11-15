@@ -554,7 +554,7 @@ int Bot::deleteBanPrefix(QString &Content)
 
             int prefix_index = Content.indexOf(prefix);
 
-            if(prefix_index > 0)
+            if(prefix_index >= 0)
                 Content = Content.replace(prefix, QString(""));
 
         }

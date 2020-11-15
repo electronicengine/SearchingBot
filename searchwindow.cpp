@@ -206,7 +206,14 @@ void SearchWindow::startButtonToggled(bool Value)
     }
     else if(Value == false)
     {
+
         Thread_Pool.clear();
+        List_Object->clearList();
+        Search_Headers.clear();
+
+        for(int i=0; i< (int)Search_Queue.size(); i++)
+            Search_Queue.pop();
+
     }
 
 }
