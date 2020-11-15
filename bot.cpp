@@ -4,6 +4,7 @@
 
 Bot::Bot()
 {
+
 }
 
 
@@ -22,7 +23,7 @@ void Bot::searchPrefix(QString &Content, QString &Prefix, QStringList &ResultLis
 
     for(int i=0; i<(int)Prefix_Pieces.size(); i++)
     {
-        if(Prefix_Pieces[i].second == '#')
+        if(Prefix_Pieces[i].second == VALID_PREFIX)
             Mode_ = variable_search;
 
         Loging::printAll(Loging::yellow, i, ": ", Prefix_Pieces[i].first.toStdString());
@@ -85,7 +86,7 @@ int Bot::searchText(QString &Content, QStringList &Prefixes, QStringList &BanPre
                 if(Current_Prefix_Number > k+1)
                     temp_prefix.replace(Variable_Prefixes[k+1], ResultList[k+1].at(l));
                 else
-                    temp_prefix.replace(Variable_Prefixes[k+1], "#");
+                    temp_prefix.replace(Variable_Prefixes[k+1], VALID_PREFIX);
             }
 
             Loging::printAll(Loging::red, "new_prefix: ", temp_prefix.toStdString());
@@ -127,7 +128,7 @@ int Bot::searchText(QString &Content, QStringList &Prefixes, QStringList &BanPre
 
 
 
-int Bot::parsePrefix(QString &Prefix, std::vector<std::pair<QString, char>> &Parsed)
+int Bot::parsePrefix(QString &Prefix, std::vector<std::pair<QString, QChar>> &Parsed)
 {
     Loging::printAll(Loging::yellow, "parsePrefix");
     int invalid_prefix_index = 0;
@@ -140,8 +141,8 @@ int Bot::parsePrefix(QString &Prefix, std::vector<std::pair<QString, char>> &Par
     //divide prefixes into an pair array to examine pieces
     while(1)
     {
-        invalid_prefix_index = Prefix.indexOf('*');
-        valid_prefix_index = Prefix.indexOf('#');
+        invalid_prefix_index = Prefix.indexOf(INVALID_PREFIX);
+        valid_prefix_index = Prefix.indexOf(VALID_PREFIX);
 
         if(valid_prefix_index >= 0 || invalid_prefix_index >= 0)
         {
@@ -173,18 +174,18 @@ int Bot::parsePrefix(QString &Prefix, std::vector<std::pair<QString, char>> &Par
                 {
                     Loging::printAll(Loging::yellow, "there is nothing before # ");
 
-                    Parsed.push_back(std::make_pair(" ", '#'));
+                    Parsed.push_back(std::make_pair(" ", VALID_PREFIX));
                 }
                 else if(index == Prefix.size() - 1) // if there is nothing after #
                 {
                     Loging::printAll(Loging::yellow, "there is nothing after #");
-                    Parsed.push_back(std::make_pair(Prefix.left(index), '#'));
+                    Parsed.push_back(std::make_pair(Prefix.left(index), VALID_PREFIX));
 
-                    Parsed.push_back(std::make_pair(" ", '#'));
+                    Parsed.push_back(std::make_pair(" ", VALID_PREFIX));
                     break;
                 }else
                 {
-                    Parsed.push_back(std::make_pair(Prefix.left(index), '#'));
+                    Parsed.push_back(std::make_pair(Prefix.left(index), VALID_PREFIX));
                 }
 
             }
@@ -194,19 +195,19 @@ int Bot::parsePrefix(QString &Prefix, std::vector<std::pair<QString, char>> &Par
                 {
                     Loging::printAll(Loging::yellow, "there is nothing before * ");
 
-                    Parsed.push_back(std::make_pair(" ", '*'));
+                    Parsed.push_back(std::make_pair(" ", INVALID_PREFIX));
                 }
                 else if(index == Prefix.size() -1) // if there is nothing affter *
                 {
                     Loging::printAll(Loging::yellow, "there is nothing after *");
-                    Parsed.push_back(std::make_pair(Prefix.left(index), '*'));
+                    Parsed.push_back(std::make_pair(Prefix.left(index), INVALID_PREFIX));
 
                     Parsed.push_back(std::make_pair(" ", '-'));
                     break;
                 }
                 else
                 {
-                    Parsed.push_back(std::make_pair(Prefix.left(index), '*'));
+                    Parsed.push_back(std::make_pair(Prefix.left(index), INVALID_PREFIX));
                 }
 
             }
@@ -251,12 +252,12 @@ int Bot::makeBeginPrefix(QString &Content)
         for(int i=0; i< (int)Prefix_Pieces.size(); i++)
         {
             //create begin prefix until variable prefix
-             if(Prefix_Pieces[i].second == '*')
+             if(Prefix_Pieces[i].second == INVALID_PREFIX)
              {
                  begin_prefix += findInvalidPrefixText(Prefix_Pieces[i].first, Prefix_Pieces[i+1].first, Content);
                  Loging::printAll(Loging::cyan, "Begin Piece: " , begin_prefix.toStdString());
              }
-             else if(Prefix_Pieces[i].second == '#')
+             else if(Prefix_Pieces[i].second == VALID_PREFIX)
              {
 
                 break;
@@ -265,7 +266,7 @@ int Bot::makeBeginPrefix(QString &Content)
         }
 
         //if begin prefix is empty
-        if(!(Prefix_Pieces[0].second == '#' && Prefix_Pieces[0].first == " "))
+        if(!(Prefix_Pieces[0].second == VALID_PREFIX && Prefix_Pieces[0].first == " "))
         {
             if(begin_prefix == " " || begin_prefix == "")
             {
@@ -273,7 +274,7 @@ int Bot::makeBeginPrefix(QString &Content)
             }
         }
 
-        if(Prefix_Pieces[Prefix_Pieces.size() - 1].second == '#' && begin_prefix == Prefix_Pieces[0].first)
+        if(Prefix_Pieces[Prefix_Pieces.size() - 1].second == VALID_PREFIX && begin_prefix == Prefix_Pieces[0].first)
             break;
 
 
@@ -295,7 +296,7 @@ int Bot::makeBeginPrefix(QString &Content)
         //check if begin prefix is including all prefix pieces
         for(int i=0; i<(int)Prefix_Pieces.size(); i++)
         {
-            if(Prefix_Pieces[i].second == '#')
+            if(Prefix_Pieces[i].second == VALID_PREFIX)
                 break;
 
             if(begin_prefix.indexOf(Prefix_Pieces[i].first) < 0 &&
@@ -338,13 +339,13 @@ int Bot::makeEndPrefix(QString &BeginPrefix, QString &Content)
     {
 
         //create end prefix until variable prefix with reverse of prefixes
-         if(Prefix_Pieces[i].second == '*')
+         if(Prefix_Pieces[i].second == INVALID_PREFIX)
          {
              end_prefix += Prefix_Pieces[i].first;
              end_prefix += findInvalidPrefixText(Prefix_Pieces[i].first, Prefix_Pieces[i+1].first, Content);
 
          }
-         else if(Prefix_Pieces[i].second == '#')
+         else if(Prefix_Pieces[i].second == VALID_PREFIX)
          {
              if(i == (int)Prefix_Pieces.size() - 1) // if there is no * after #, include the last known prefix to the end prefix
              {
@@ -366,7 +367,7 @@ int Bot::makeEndPrefix(QString &BeginPrefix, QString &Content)
     Loging::printAll(Loging::cyan, "End Prefix: " , end_prefix.toStdString());
     Loging::printAll(Loging::cyan, " -----------------------");
 
-    if(Prefix_Pieces[0].first == " " && Prefix_Pieces[0].second == '#')
+    if(Prefix_Pieces[0].first == " " && Prefix_Pieces[0].second == VALID_PREFIX)
     {
         searched_text = findInvalidPrefixText(BeginPrefix, end_prefix, Content);
         searched_text = searched_text.left(searched_text.indexOf(end_prefix));
@@ -380,7 +381,7 @@ int Bot::makeEndPrefix(QString &BeginPrefix, QString &Content)
     //check all prefix pieces is including
     for(int i=Prefix_Pieces.size() - 1; i >= 0; i--)
     {
-        if(Prefix_Pieces[i].second == '#')
+        if(Prefix_Pieces[i].second == VALID_PREFIX)
             break;
 
         if(end_prefix.indexOf(Prefix_Pieces[i].first) < 0 &&
@@ -424,7 +425,7 @@ int Bot::deleteBanPrefix(QString &Content)
 
     for(int i = 0; i<(int)Ban_Prefixes.size(); i++)
     {
-        int prefix_piece = Ban_Prefixes[i].indexOf("*");
+        int prefix_piece = Ban_Prefixes[i].indexOf(INVALID_PREFIX);
 
         if(prefix_piece < 0)
         {
@@ -438,7 +439,7 @@ int Bot::deleteBanPrefix(QString &Content)
         }
         else
         {
-            QStringList ban_prefix_pieces = Ban_Prefixes[i].split("*");
+            QStringList ban_prefix_pieces = Ban_Prefixes[i].split(INVALID_PREFIX);
             QString complete_ban_text;
 
             complete_ban_text += ban_prefix_pieces.at(0);
@@ -446,7 +447,12 @@ int Bot::deleteBanPrefix(QString &Content)
             for(int i = 0; i<ban_prefix_pieces.size() - 1; i++)
             {
                 QString begin_prefix = ban_prefix_pieces.at(i);
+                if(begin_prefix == "")
+                    begin_prefix = " ";
+
                 QString end_prefix = ban_prefix_pieces.at(i+1);
+                if(end_prefix == "")
+                    end_prefix = " ";
 
                 complete_ban_text += findInvalidPrefixText(begin_prefix, end_prefix, Content);
 
@@ -638,7 +644,7 @@ int Bot::defineTextVariables(QStringList Search_Prefixes)
 
         for(int k = 0; k<9; k++)
         {
-            int index = temp_prefix.indexOf("#");
+            int index = temp_prefix.indexOf(VALID_PREFIX);
             if(index < 0)
                 break;
 
@@ -651,12 +657,12 @@ int Bot::defineTextVariables(QStringList Search_Prefixes)
             bool exist = false;
             foreach(QString var, Variable_Prefixes)
             {
-                if(QString("#" + temp_prefix[index + 1]) == var)
+                if(QString(VALID_PREFIX + temp_prefix[index + 1]) == var)
                     exist = true;
             }
 
             if(exist == false)
-                Variable_Prefixes.push_back("#" + temp_prefix[index + 1]);
+                Variable_Prefixes.push_back(VALID_PREFIX + temp_prefix[index + 1]);
 
             temp_prefix = temp_prefix.mid(QString(temp_prefix[index + 1]).toInt()+1);
 
@@ -680,10 +686,10 @@ int Bot::defineTextVariables(QStringList Search_Prefixes)
 void Bot::makeMainPrefixSearch(QString &Content, QString &Main_Prefix,QStringList &ResultList)
 {
 
-    if(Main_Prefix.indexOf("#") < 0)
+    if(Main_Prefix.indexOf(VALID_PREFIX) < 0)
         Mode_ = constant_search;
     else
-        Main_Prefix.replace(Variable_Prefixes[0], "#");
+        Main_Prefix.replace(Variable_Prefixes[0], VALID_PREFIX);
 
     Loging::printAll(Loging::yellow, "Main Prefix: " , Main_Prefix.toStdString());
     Loging::printAll(Loging::green, "Content : " , Content.toStdString());

@@ -9,6 +9,7 @@
 BotUnitTest::BotUnitTest()
 {
 
+
     testOldCases();
     printTotalResults();
 
@@ -146,6 +147,13 @@ void BotUnitTest::testOldCases()
                     "Achilles tendinitis",
                     "Achilles tendon rupture"}});
 
+    createTestCase({"<a href=\"https://www.mayoclinic.org/diseases-conditions*syc*>#1</a>"},
+                   {"*visual*"},
+                   {{"<span joint separation, also known as</span>Separated shoulder",
+                    "Acanthosis nigricans",
+                    "Achalasia",
+                    "Achilles tendinitis",
+                    "Achilles tendon rupture"}});
 
     createTestCase({"*a href=\"https://www.mayoclinic.org/diseases-conditions*syc*>#1</a*"},
                    {"<span*</span>"},
