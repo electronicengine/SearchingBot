@@ -141,28 +141,32 @@ std::vector<QStringList> FileLog::getCategorizedContent()
     QString line;
     QStringList temp_list;
 
+
     if (inputFile.open(QIODevice::ReadOnly))
     {
        QTextStream in(&inputFile);
        while (!in.atEnd())
        {
 
-          temp_list = in.readLine().split("||");
+           line = in.readLine();
+           if(line.indexOf("====>") < 0)
+           {
+               temp_list = line.split("||");
 
-          if(temp_list.size() > (int)categorized_data.size())
-          {
-              for(int i=0; i<temp_list.size(); i++)
-                    categorized_data.push_back(QStringList());
-          }
+               if(temp_list.size() > (int)categorized_data.size())
+               {
+                   for(int i=0; i<temp_list.size(); i++)
+                         categorized_data.push_back(QStringList());
+               }
 
-          for(int i=0; i<temp_list.size(); i++)
-          {
-              if(temp_list.at(i) != "" || temp_list.at(i) != " ")
-                categorized_data.at(i).append(temp_list.at(i).simplified());
-          }
+               for(int i=0; i<temp_list.size(); i++)
+               {
+                   if(temp_list.at(i) != "" || temp_list.at(i) != " ")
+                     categorized_data.at(i).append(temp_list.at(i).simplified());
+               }
 
-          temp_list.clear();
-
+               temp_list.clear();
+           }
        }
 
        inputFile.close();
