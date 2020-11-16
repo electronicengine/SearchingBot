@@ -14,13 +14,14 @@ is the descriptor of the desired data.  It can be html tag, link or any of descr
 
 Example Search:
 For example, If I want to get the "Desired Data" section from this content;
-
+```sh
 garbage text-start offsettext sometexthere <a href= "somelink-dir"> Desired Data </a> sometexthere close offsettext-garbage text
-
+```
 I can make a search with this prefix;
 
+```sh
 >start offsettext{<a href="somelink*>#1</a>}close offsettext
-
+```
 Searching bot extracts the sections place where is "#1" from all of content, and list them in file. If you don't need to offset prefix, don't use it.
 
 As a result;
@@ -33,22 +34,24 @@ As a result;
 ```
 
 You can also enter multiple prefix and extract multiple data set by using valid prefix. For Example, You can extract "Desired Data", and the link section from above content with this search prefix;
-
+```sh
 > <a href*>#1</a>, <a href=#2>#1</a>
-
+```
 Notes; You can not use valid and invalid prefix without any latter between them.
 
 As a Result;
-
+```sh
 > **Content:** sometexthere <a href="somelink-dir">Desired Data</a> sometexthere
 
 > **Search Prefix:** <a href*>#1</a>, <a ref=#2>#1</a>
 
 > **Result:** Desired Data || somelink-dir
+```
 
 **Ban Prefix:**
 Ban prefix is used for removing undesired data from extracted data.  For example, Consider that example
 
+```sh
 > **Content:** sometexthere <a href="somelink-dir"><span> undesired data </span>Desired Data</a> sometexthere 
 
 > **Search Prefix:** <a href=*>#1</a>
@@ -56,12 +59,13 @@ Ban prefix is used for removing undesired data from extracted data.  For exampl
 > **Ban Prefix:** <span>*</span>
 
 > **Result:** Desired Data
-
+```
 You can use multiple ban prefix by putting "," between them and also invalid prefix "*" in it.
 
 **Split Prefix:**
 Split prefix is used for splitting the desired data by one specified char
 
+```sh
 > **Content:** sometexthere <a href="somelink-dir"><span> undesired data </span>Desired-Data</a> sometexthere
 
 > **Search Prefix:** <a href=*>#1</a> 
@@ -71,7 +75,7 @@ Split prefix is used for splitting the desired data by one specified char
 > **Split Prefix:** -
 
 > **Result:** Desired || Data
-
+```
 
 **File Operations:**
 You can save and load a text file to app by using file buttons in the App. Files can be used for adding multiple search prefixes, ban prefixes and also URL's
@@ -145,14 +149,15 @@ Also you can use that column keywords with other keywords like that;
 **file:// Descriptor:** You can make a search in a file rather than web page. the file descriptor is used for specifying the name of the file which is saved by previous searching.
 
 Example usage:
-
+```sh
 > **Search Url:** file://<file-name>
-
+```
 
 The application local directory is /home/user/.local/share/SearchingBot in Linux
 
 **file://external/ Descriptor:** If you want to make search in external file, you can specify that file directory with external keyword.
 
 Example usage:
-
+```sh
 > **Search Url:** file://external/<file-path>/<file-name>
+```
