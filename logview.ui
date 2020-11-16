@@ -118,9 +118,9 @@ border-image: url(:/images/save_pressed.png);
       </layout>
      </item>
      <item>
-      <layout class="QGridLayout" name="gridLayout">
+      <layout class="QGridLayout" name="gridLayout_4">
        <item row="0" column="0">
-        <widget class="QPushButton" name="clear_button">
+        <widget class="QPushButton" name="database_button">
          <property name="minimumSize">
           <size>
            <width>120</width>
@@ -134,13 +134,13 @@ border-image: url(:/images/save_pressed.png);
           </size>
          </property>
          <property name="styleSheet">
-          <string notr="true">#clear_button
+          <string notr="true">#database_button
 {
-border-image: url(:/images/delete_unpressed.png);
+border-image: url(:/images/database_unpressed.png);
 }
-#clear_button:pressed
+#database_button:pressed
 {
-border-image: url(:/images/delete_pressed.png);
+border-image: url(:/images/database_pressed.png);
 }
 </string>
          </property>
@@ -150,7 +150,7 @@ border-image: url(:/images/delete_pressed.png);
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QLabel" name="label_12">
+        <widget class="QLabel" name="label_13">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -173,7 +173,7 @@ border-image: url(:/images/delete_pressed.png);
           <string notr="true">color: rgb(114, 159, 207);</string>
          </property>
          <property name="text">
-          <string>clear</string>
+          <string>database</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -239,6 +239,71 @@ border-image: url(:/images/file_pressed.png);
          </property>
          <property name="text">
           <string>Open</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QPushButton" name="clear_button">
+         <property name="minimumSize">
+          <size>
+           <width>120</width>
+           <height>120</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>120</width>
+           <height>120</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">#clear_button
+{
+border-image: url(:/images/delete_unpressed.png);
+}
+#clear_button:pressed
+{
+border-image: url(:/images/delete_pressed.png);
+}
+</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_12">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>300</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: rgb(114, 159, 207);</string>
+         </property>
+         <property name="text">
+          <string>clear</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>

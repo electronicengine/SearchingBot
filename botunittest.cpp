@@ -9,7 +9,6 @@
 BotUnitTest::BotUnitTest()
 {
 
-    createTestCase({"a*"}, {"<span*</span>"}, {{"acanthosis"}});
 
     testOldCases();
     printTotalResults();

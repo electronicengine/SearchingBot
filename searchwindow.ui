@@ -81,6 +81,27 @@ GridLayout{backgroundColor: transparent;}
      </widget>
     </item>
     <item>
+     <widget class="QLabel" name="label_10">
+      <property name="text">
+       <string>Split Prefix</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="split_prefix">
+      <property name="styleSheet">
+       <string notr="true">background-color: #272d2f;
+</string>
+      </property>
+      <property name="text">
+       <string>-</string>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QLabel" name="label_3">
       <property name="text">
        <string>Search Url</string>
@@ -327,7 +348,7 @@ border-image: url(:/images/delete_pressed.png);
        <string>Search Url List</string>
       </property>
       <property name="alignment">
-       <set>Qt::AlignCenter</set>
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
       </property>
      </widget>
     </item>

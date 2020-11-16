@@ -25,9 +25,11 @@ LogView::LogView(QWidget *parent) :
 
     ui->quickWidget->setSource(QUrl("qrc:/LogArea.qml"));
 
-    connect(ui->clear_button, SIGNAL(clicked(bool)), this, SLOT(clearButtonClicked()));
+    connect(ui->database_button, SIGNAL(clicked()), this, SLOT(databaseButtonClicked()));
+    connect(ui->clear_button, SIGNAL(clicked()), this, SLOT(clearButtonClicked()));
     connect(ui->save_button, SIGNAL(clicked()), this, SLOT(saveButtonClicked()));
     connect(ui->open_button, SIGNAL(clicked()), this, SLOT(openButtonClicked()));
+    connect(this, SIGNAL(appendSignal(QString)), this, SLOT(appendSlot(QString)), Qt::QueuedConnection);
 //    connect(this, SIGNAL(appendTextQueue(QString)), ui->plainTextEdit, SLOT(appendPlainText(QString)), Qt::QueuedConnection);
 
 }
@@ -86,7 +88,16 @@ void LogView::clearText()
 
     QMetaObject::invokeMethod(rect, "clear");
 
-//    ui->plainTextEdit->clear();
+    //    ui->plainTextEdit->clear();
+}
+
+
+
+void LogView::databaseButtonClicked()
+{
+    FileLog *file_log = new FileLog(data_base, log_view, this);
+
+    file_log->show();
 }
 
 
@@ -114,4 +125,9 @@ void LogView::openButtonClicked()
 void LogView::clearButtonClicked()
 {
     clearText();
+}
+
+void LogView::appendSlot(const QString &Txt)
+{
+    appendText(Txt);
 }
