@@ -91,9 +91,9 @@ search url4 || ban prefix4 || search prefix4
 You can use it for sequential adding by using [1], [2], [3].... [9] keywords.The numbers are indicating the column number. For Example,
 
 ```sh
-> **Search Url :** [1]
-> **Ban Prefix :** [2]
-> **Search Prefix :** [3]
+> Search Url : [1]
+> Ban Prefix : [2]
+> Search Prefix : [3]
 ```
 
 with this entry, App understands that will put first column to "Search Url", second "Ban Prefix" and third "Search Prefix"
