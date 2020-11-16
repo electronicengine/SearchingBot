@@ -24,12 +24,13 @@ I can make a search with this prefix;
 Searching bot extracts the sections place where is "#1" from all of content, and list them in file. If you don't need to offset prefix, don't use it.
 
 As a result;
-
+```sh
 > **Content:**  "sometexthere <a href="somelink-dir">Desired Data</a> sometexthere"
 
 > **Search Prefix:** <a href*>#1</a>
 
 > **Search Result:** Desired Data
+```
 
 You can also enter multiple prefix and extract multiple data set by using valid prefix. For Example, You can extract "Desired Data", and the link section from above content with this search prefix;
 
