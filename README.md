@@ -1,8 +1,8 @@
 # SearchingBot
 
-Hello everyone, In these days which the unit price of data is higher than oil, everyone's problem is finding data and categorize it. We can find all kinds of data on the internet, and thanks to google, it is now easy to access any data. But, The data in the internet is available as a stack and complex manner. I developed the this SearchingBot App to find the desired data in specific web page or file. We can make a search in specific Web-File URL or URL List which got from previous searches. Therefore, You can create a specific search batch.
+Hello everyone, In these days which the unit price of data is higher than oil, everyone's problem is finding data and categorize it. We can find all kinds of data on the internet, and thanks to google, it is now easy to access any data. But, The data in the internet is available as a stack and complex manner. SearchingBot finds the desired data in specific web page or file. We can make a search in specific Web-File URL or URL List which got from previous searches. Therefore, You can create a specific search batch.
 
-I have written the app in Qt-C++ and a little bit Qml. You can compile it for Windows, Linux, Mac, Android and also ios. I have tested on Android and Linux.
+You can compile it for Windows, Linux, Mac, Android and also ios. It is tested on Android and Linux.
 
 # App Usage
 
