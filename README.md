@@ -81,21 +81,20 @@ Split prefix is used for splitting the desired data by one specified char
 You can save and load a text file to app by using file buttons in the App. Files can be used for adding multiple search prefixes, ban prefixes and also URL's
 
 For example, If you have a file like that;
-
->search url1 || ban prefix1 || search Prefix1
->search url2 || ban prefix2 || search prefix2
->search url3 || ban prefix3 || search prefix3
->search url4 || ban prefix4 || search prefix4
->....        || ....        || ...
-
+```sh
+search url1 || ban prefix1 || search Prefix1
+search url2 || ban prefix2 || search prefix2
+search url3 || ban prefix3 || search prefix3
+search url4 || ban prefix4 || search prefix4
+....        || ....        || ...
+```
 You can use it for sequential adding by using [1], [2], [3].... [9] keywords.The numbers are indicating the column number. For Example,
 
+```sh
 > **Search Url :** [1]
-
 > **Ban Prefix :** [2]
-
 > **Search Prefix :** [3]
-
+```
 
 with this entry, App understands that will put first column to "Search Url", second "Ban Prefix" and third "Search Prefix"
 
