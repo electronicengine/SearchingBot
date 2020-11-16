@@ -4,6 +4,7 @@
 #include <logview.h>
 #include <searchwindow.h>
 #include <QMessageBox>
+#include <QtSql>
 #include "filelog.h"
 #include "loging.h"
 #include "ui_filelog.h"
@@ -18,6 +19,8 @@ FileLog::FileLog(OpsType Ops, MainWindowType Type, QWidget *MainWindow, QWidget 
         ui->ops_name->setText("Save");
     else if(Ops == open)
         ui->ops_name->setText("Open");
+    else if(Ops == data_base)
+        ui->ops_name->setText("Pack");
 
     MainWindow_Type = Type;
     Operation_Type = Ops;
@@ -60,6 +63,10 @@ void FileLog::okButtonClicked()
     else if(Operation_Type == open)
     {
         fileOpenOperation();
+    }
+    else if(Operation_Type == data_base)
+    {
+        savetoDataBaseOperation();
     }
 
     deleteLater();
@@ -123,6 +130,107 @@ void FileLog::fileSaveOperation()
       stream << dynamic_cast<LogView *>(Main_Window)->getAllText();
 
       file.close();
+    }
+
+    QMessageBox::information(this, "File Save", "File Saved");
+}
+
+
+
+
+void FileLog::savetoDataBaseOperation()
+{
+    QString writable = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setConnectOptions();
+
+    db.setDatabaseName(writable + "/" + ui->file_name->text());
+
+    if(db.open())
+    {
+        int line_counter = 0;
+        bool data_base_created = false;
+        QSqlQuery query;
+        QString query_str;
+        QString text = dynamic_cast<LogView *>(Main_Window)->getAllText();
+        QTextStream stream(&text);
+        QString line;
+        QString header_column;
+
+
+        while (stream.readLineInto(&line))
+        {
+            if(data_base_created == true)
+            {
+                if(line.indexOf("====>") < 0)
+                {
+                    QStringList colums = line.split("||", QString::SkipEmptyParts);
+
+                    query_str = "INSERT INTO table (" + QString::number(line_counter) + "," + header_column;
+
+                    for(int i=0; i<colums.size(); i++)
+                    {
+                        query_str += colums.at(i);
+
+                        if(i != colums.size() -1 )
+                            query_str += ",";
+                    }
+
+                    query_str += ");";
+
+                    Loging::printAll(Loging::yellow, "query str: ", query_str.toStdString());
+
+                    query.exec(query_str);
+
+                }
+                else
+                {
+                    header_column = line.mid(6);
+                }
+            }
+            else if(data_base_created == false)
+            {
+                if(line.indexOf("====>") < 0)
+                {
+                    QStringList colums = line.split("||", QString::SkipEmptyParts);
+                    int column_size = colums.size();
+
+                    query_str = "CREATE TABLE table (ID integer,";
+
+                    for(int i=0; i<column_size; i++)
+                    {
+                        query_str += QString("Colum ");
+                        query_str += QString::number(i) + "VARCHAR(200)";
+                    }
+                    query_str += ");";
+
+                    query.exec(query_str);
+
+                    query_str = "INSERT INTO table (" + QString::number(line_counter) + "," + header_column;
+                    Loging::printAll(Loging::yellow, "query str: ", query_str.toStdString());
+
+                    for(int i=0; i<column_size; i++)
+                    {
+                        query_str += colums.at(i);
+                        if(i != colums.size() -1 )
+                            query_str += ",";
+                    }
+
+                    query_str += ");";
+                    Loging::printAll(Loging::yellow, "query str: ", query_str.toStdString());
+
+                    query.exec(query_str);
+
+                }
+                else
+                {
+                    header_column = line.mid(6);
+                }
+            }
+
+            line_counter++;
+        }
+
     }
 
     QMessageBox::information(this, "File Save", "File Saved");

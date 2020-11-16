@@ -9,7 +9,8 @@
 enum OpsType
 {
     save,
-    open
+    open,
+    data_base,
 };
 
 enum MainWindowType
@@ -36,6 +37,7 @@ private slots:
     void deleteButtonClicked();
     void fileOpenOperation();
     void fileSaveOperation();
+    void savetoDataBaseOperation();
     std::vector<QStringList> getCategorizedContent();
 
 

@@ -247,7 +247,7 @@ void SearchWindow::searchResultCallBackFunction(const std::vector<QStringList> &
         plain_text += "\n";
     }
 
-    Log_View->appendText(plain_text);
+    emit Log_View->appendSignal(plain_text);
 
     QThread::sleep(1);
 

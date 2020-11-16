@@ -21,12 +21,15 @@ public:
     void clearText();
 
 public slots:
+    void databaseButtonClicked();
     void saveButtonClicked();
     void openButtonClicked();
     void clearButtonClicked();
+    void appendSlot(const QString &Txt);
 
 signals:
     void appendTextQueue(QString Txt);
+    void appendSignal(const QString &Txt);
 
 private:
     Ui::LogView *ui;
