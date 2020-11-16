@@ -4,6 +4,7 @@ Hello everyone, In these days which the unit price of data is higher than oil, e
 
 You can compile it for Windows, Linux, Mac, Android and also ios. It is tested on Android and Linux.
 
+![alt text](http://yusufbulbul.com/wp-content/uploads/2020/11/Screenshot-from-2020-11-16-15-34-12.png)
 # App Usage
 
 **The search prefix** 
