@@ -51,6 +51,8 @@ private:
 
     QString &getSelectedFileContent();
     void listFiles();
+    void createTable(int ColumnSize);
+    void insertValues(int Id, const QString &Header, const QStringList &Values);
 
 };
 
