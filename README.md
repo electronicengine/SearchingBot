@@ -100,51 +100,38 @@ You can use it for sequential adding by using [1], [2], [3].... [9] keywords.The
 with this entry, App understands that will put first column to "Search Url", second "Ban Prefix" and third "Search Prefix"
 
 Result:
+```sh
 
 > **Search Queue 1;**
 
 > **Search Url :** search url1 
-
 > **Ban Prefix :** ban prefix1 
-
 > **Search Prefix :** search Prefix1
 
 > **Search Queue 2;**
 
 > **Search Url :** search url2 
-
 > **Ban Prefix :** ban prefix2
-
 > **Search Prefix :** search Prefix2
 
 > **Search Queue 3;**
 
 > **Search Url :** search url3 
-
 > **Ban Prefix :** ban prefix3 
-
 > **Search Prefix :** search Prefix3
 
 > **Search Queue 4;**
 
 > **Search Url :** search url4 
-
 > **Ban Prefix :** ban prefix4 
-
 > **Search Prefix :** search Prefix4
-
+```
 Also you can use that column keywords with other keywords like that;
-
+```
 > **Search Url :** Begining[1]
-
 > **Ban Prefix :** Someban, key[2]
-
 > **Search Prefix :** someprefix[3]
-
-
-
-
-
+```
 
 **file:// Descriptor:** You can make a search in a file rather than web page. the file descriptor is used for specifying the name of the file which is saved by previous searching.
 
