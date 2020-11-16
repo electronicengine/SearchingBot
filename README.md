@@ -15,7 +15,7 @@ is the descriptor of the desired data.  It can be html tag, link or any of descr
 Example Search:
 For example, If I want to get the "Desired Data" section from this content;
 
-> "garbage text-start offsettext sometexthere "<a href= "somelink-dir"> Desired Data </a>" sometexthere close offsettext-garbage text"
+garbage text-start offsettext sometexthere <a href= "somelink-dir"> Desired Data </a> sometexthere close offsettext-garbage text
 
 I can make a search with this prefix;
 
