@@ -9,6 +9,8 @@
 #include "loging.h"
 #include "ui_filelog.h"
 
+
+
 FileLog::FileLog(OpsType Ops, MainWindowType Type, QWidget *MainWindow, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::FileLog)
