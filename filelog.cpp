@@ -120,7 +120,7 @@ void FileLog::fileSaveOperation()
     QString writable = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 
 
-    QFile file(writable + "/" + ui->file_name->text());
+    QFile file(writable + "/" + ui->file_name->text() + ".log");
 
     if(file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
@@ -137,6 +137,60 @@ void FileLog::fileSaveOperation()
 
 
 
+void FileLog::createTable(int ColumnSize)
+{
+
+    QString query_str;
+    QSqlQuery query;
+
+    query_str = "CREATE TABLE a_table (ID integer";
+
+    for(int i=0; i<ColumnSize; i++)
+    {
+        query_str += QString(", Column");
+        query_str += QString::number(i) + " VARCHAR(200)";
+    }
+
+    query_str += ");";
+    Loging::printAll(Loging::yellow, "query str: ", query_str.toStdString());
+
+    query.exec(query_str);
+}
+
+
+
+void FileLog::insertValues(int Id, const QString &Header, const QStringList &Values)
+{
+    QString query_str;
+    QSqlQuery query;
+
+    query_str = "INSERT INTO a_table (ID";
+
+    for(int i=0; i<Values.size(); i++)
+    {
+        query_str += ",";
+        query_str += "Column";
+        query_str += QString::number(i);
+    }
+
+    query_str += ") ";
+    query_str += "VALUES (" + QString::number(Id) + ",\"" + Header + "\"";
+
+    for(int i=0; i<Values.size() - 1; i++)
+    {
+        query_str += ",\"";
+        query_str += Values.at(i).simplified();
+        query_str += "\"";
+    }
+
+    query_str += "); ";
+
+    Loging::printAll(Loging::yellow, "query str: ", query_str.toStdString());
+
+    query.exec(query_str);
+}
+
+
 
 void FileLog::savetoDataBaseOperation()
 {
@@ -144,7 +198,7 @@ void FileLog::savetoDataBaseOperation()
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     db.setConnectOptions();
 
-    db.setDatabaseName(writable + "/" + ui->file_name->text());
+    db.setDatabaseName(writable + "/" + ui->file_name->text() + ".db");
 
     if(db.open())
     {
@@ -157,74 +211,38 @@ void FileLog::savetoDataBaseOperation()
         QString line;
         QString header_column;
 
-
         while (stream.readLineInto(&line))
         {
             if(data_base_created == true)
             {
                 if(line.indexOf("====>") < 0)
                 {
-                    QStringList colums = line.split("||", QString::SkipEmptyParts);
+                    QStringList colums = line.split("||",  Qt::SkipEmptyParts);
 
-                    query_str = "INSERT INTO table (" + QString::number(line_counter) + "," + header_column;
-
-                    for(int i=0; i<colums.size(); i++)
-                    {
-                        query_str += colums.at(i);
-
-                        if(i != colums.size() -1 )
-                            query_str += ",";
-                    }
-
-                    query_str += ");";
-
-                    Loging::printAll(Loging::yellow, "query str: ", query_str.toStdString());
-
-                    query.exec(query_str);
-
+                    insertValues(line_counter, header_column, colums);
                 }
                 else
                 {
-                    header_column = line.mid(6);
+                    header_column = line.mid(5);
                 }
             }
             else if(data_base_created == false)
             {
                 if(line.indexOf("====>") < 0)
                 {
-                    QStringList colums = line.split("||", QString::SkipEmptyParts);
-                    int column_size = colums.size();
 
-                    query_str = "CREATE TABLE table (ID integer,";
+                    QStringList columns = line.split("||", Qt::SkipEmptyParts);
 
-                    for(int i=0; i<column_size; i++)
-                    {
-                        query_str += QString("Colum ");
-                        query_str += QString::number(i) + "VARCHAR(200)";
-                    }
-                    query_str += ");";
+                    createTable(columns.size());
 
-                    query.exec(query_str);
+                    insertValues(line_counter, header_column, columns);
 
-                    query_str = "INSERT INTO table (" + QString::number(line_counter) + "," + header_column;
-                    Loging::printAll(Loging::yellow, "query str: ", query_str.toStdString());
-
-                    for(int i=0; i<column_size; i++)
-                    {
-                        query_str += colums.at(i);
-                        if(i != colums.size() -1 )
-                            query_str += ",";
-                    }
-
-                    query_str += ");";
-                    Loging::printAll(Loging::yellow, "query str: ", query_str.toStdString());
-
-                    query.exec(query_str);
+                   data_base_created = true;
 
                 }
                 else
                 {
-                    header_column = line.mid(6);
+                    header_column = line.mid(5);
                 }
             }
 
@@ -317,3 +335,7 @@ void FileLog::listFiles()
     for(int i=0; i<file_names.size(); i++)
         List_Object->addItem(file_names.at(i));
 }
+
+
+
+
