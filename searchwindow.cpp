@@ -225,6 +225,7 @@ void SearchWindow::searchResultCallBackFunction(const std::vector<QStringList> &
 
     std::unique_lock<std::mutex> ul(Mutex_);
     QString plain_text;
+    QString split_prefix = ui->split_prefix->text();
 
     static int complated_queue_counter = 0;
     complated_queue_counter++;
@@ -242,7 +243,27 @@ void SearchWindow::searchResultCallBackFunction(const std::vector<QStringList> &
         for(int i = 0; i< (int) ResultList.size(); i++)
         {
             if(ResultList.at(i).size() >= k)
-                plain_text += ResultList.at(i).at(k) + "\t||\t";
+            {
+                if(!split_prefix.isEmpty())
+                {
+
+                    if(ResultList.at(i).at(k).indexOf(split_prefix) >= 0)
+                    {
+                        QStringList temp = ResultList.at(i).at(k).split(split_prefix, Qt::SkipEmptyParts);
+
+                        for(int l=0; l<temp.size(); l++)
+                        {
+                            plain_text += temp.at(l) + "\t||\t\n";
+                        }
+
+                    }
+                }
+                else
+                {
+                    plain_text += ResultList.at(i).at(k) + "\t||\t";
+                }
+            }
+
         }
         plain_text += "\n";
     }
