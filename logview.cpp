@@ -25,6 +25,7 @@ LogView::LogView(QWidget *parent) :
 
     ui->quickWidget->setSource(QUrl("qrc:/LogArea.qml"));
 
+    connect(ui->flush_button, SIGNAL(clicked()), this, SLOT(flushButtonClicked()));
     connect(ui->database_button, SIGNAL(clicked()), this, SLOT(databaseButtonClicked()));
     connect(ui->clear_button, SIGNAL(clicked()), this, SLOT(clearButtonClicked()));
     connect(ui->save_button, SIGNAL(clicked()), this, SLOT(saveButtonClicked()));
@@ -89,6 +90,30 @@ void LogView::clearText()
     QMetaObject::invokeMethod(rect, "clear");
 
     //    ui->plainTextEdit->clear();
+}
+
+
+
+void LogView::flushButtonClicked()
+{
+    QStringList all = getAllText().split("\n");
+    QStringList flushed_list;
+
+    clearText();
+
+    for(int i=0; i<all.size(); i++)
+    {
+
+        if(flushed_list.count(all.at(i)) < 1)
+            flushed_list.append(all.at(i));
+    }
+
+
+    foreach (QString line, flushed_list)
+    {
+        appendText(line);
+    }
+
 }
 
 

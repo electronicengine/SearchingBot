@@ -257,6 +257,10 @@ void SearchWindow::searchResultCallBackFunction(const std::vector<QStringList> &
                         }
 
                     }
+                    else
+                    {
+                        plain_text += ResultList.at(i).at(k) + "\t||\t";
+                    }
                 }
                 else
                 {

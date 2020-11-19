@@ -21,6 +21,7 @@ public:
     void clearText();
 
 public slots:
+    void flushButtonClicked();
     void databaseButtonClicked();
     void saveButtonClicked();
     void openButtonClicked();
