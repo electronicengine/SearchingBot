@@ -44,5 +44,7 @@
         <file>images/cover_h480.png</file>
         <file>images/database_unpressed.png</file>
         <file>images/database_pressed.png</file>
+        <file>images/double_unpressed.png</file>
+        <file>images/double_pressed.png</file>
     </qresource>
 </RCC>
