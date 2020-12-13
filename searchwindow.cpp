@@ -53,6 +53,9 @@ SearchWindow::SearchWindow(QWidget *parent) :
     connect(ui->start_button, SIGNAL(toggled(bool)), this, SLOT(startButtonToggled(bool)));
     connect(ui->open_list_button, SIGNAL(clicked()), this, SLOT(openUrlListFileButtonClicked()));
 
+    Temp_File = new QFile("temp.log");
+
+    Temp_File->open(QIODevice::WriteOnly | QIODevice::Text);
 
 }
 
@@ -60,6 +63,7 @@ SearchWindow::SearchWindow(QWidget *parent) :
 
 SearchWindow::~SearchWindow()
 {
+    Temp_File->close();
     delete ui;
 }
 
@@ -67,8 +71,8 @@ SearchWindow::~SearchWindow()
 
 void SearchWindow::appendUrlList(const QString &Str)
 {
-
-    List_Object->addItem(Str);
+    (void)Str;
+//    List_Object->addItem(Str);
 
 }
 
@@ -192,6 +196,10 @@ void SearchWindow::startButtonToggled(bool Value)
 
             std::vector<QStringList> &current_search =
                     Search_Queue.front();
+
+            if(current_search.empty())
+                continue;
+
             SearchQueueWorker *worker = new SearchQueueWorker(i, current_search, this);
             worker->setAutoDelete(true);
 
@@ -222,10 +230,10 @@ void SearchWindow::startButtonToggled(bool Value)
 
 void SearchWindow::searchResultCallBackFunction(const std::vector<QStringList> &ResultList, int QueueId)
 {
-
     std::unique_lock<std::mutex> ul(Mutex_);
     QString plain_text;
     QString split_prefix = ui->split_prefix->text();
+    QTextStream file_stream(Temp_File);
 
     static int complated_queue_counter = 0;
     complated_queue_counter++;
@@ -235,6 +243,8 @@ void SearchWindow::searchResultCallBackFunction(const std::vector<QStringList> &
     Progress_Bar->setPersentage((double)complated_queue_counter/Queue_Size);
 
     Log_View->appendText("====>" + Search_Headers[QueueId]);
+    file_stream << "====>" + Search_Headers[QueueId] + "\n";
+
     if(Queue_Size == (int)File_Input_List.size())
         Log_View->appendText("Query Prefix: " + File_Input_List.at(QueueId));
 
@@ -242,29 +252,38 @@ void SearchWindow::searchResultCallBackFunction(const std::vector<QStringList> &
     {
         for(int i = 0; i< (int) ResultList.size(); i++)
         {
+            if(ResultList.at(i).isEmpty())
+                break;
+
             if(ResultList.at(i).size() >= k)
             {
                 if(!split_prefix.isEmpty())
                 {
+                    if(ResultList.at(i).at(k) == NULL)
+                        break;
 
                     if(ResultList.at(i).at(k).indexOf(split_prefix) >= 0)
                     {
                         QStringList temp = ResultList.at(i).at(k).split(split_prefix, Qt::SkipEmptyParts);
 
+                        if(temp.isEmpty())
+                            break;
+
                         for(int l=0; l<temp.size(); l++)
                         {
-                            plain_text += temp.at(l) + "\t||\t\n";
+                            if(temp.at(l).simplified() != " " && temp.at(l).simplified() != "" && plain_text.indexOf(temp.at(l).simplified()) < 0)
+                                plain_text += temp.at(l).simplified() + "\t||\t\n";
                         }
 
                     }
                     else
                     {
-                        plain_text += ResultList.at(i).at(k) + "\t||\t";
+                        plain_text += ResultList.at(i).at(k).simplified() + "\t||\t";
                     }
                 }
                 else
                 {
-                    plain_text += ResultList.at(i).at(k) + "\t||\t";
+                    plain_text += ResultList.at(i).at(k).simplified() + "\t||\t";
                 }
             }
 
@@ -272,9 +291,11 @@ void SearchWindow::searchResultCallBackFunction(const std::vector<QStringList> &
         plain_text += "\n";
     }
 
-    emit Log_View->appendSignal(plain_text);
+    emit Log_View->appendTextQueue(plain_text);
+    file_stream << plain_text;
+    file_stream << "\n";
 
-    QThread::sleep(1);
+//    QThread::sleep(1);
 
     if((double)complated_queue_counter/Queue_Size == 1)
     {

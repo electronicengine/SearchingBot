@@ -515,7 +515,7 @@ int Bot::makeEndPrefix(QString &BeginPrefix, QString &Content)
 
 
     if(!Ban_Prefixes.empty())
-        deleteBanPrefix(searched_text);
+        deleteBanPrefix(searched_text);      
 
     Current_Search_Text += searched_text;
     Current_Search_Text += end_prefix;
@@ -561,17 +561,34 @@ int Bot::deleteBanPrefix(QString &Content)
         }
         else
         {
-            QStringList prefix_pieces = Ban_Prefixes[i].split(INVALID_PREFIX);
+            do
+            {
+                QStringList prefix_pieces = Ban_Prefixes[i].split(INVALID_PREFIX);
 
-            QString complete_ban_text = complateSearchPrefix(prefix_pieces, Content);
+                //check if content includes ban prefix
+                bool including = true;
+                foreach (QString Piece, prefix_pieces)
+                {
+                    if(Content.indexOf(Piece) < 0)
+                        including = false;
+                }
 
-            Loging::printAll(Loging::red, "Complete Ban Text: ", complete_ban_text.toStdString());
+                if(including == false)
+                    break;
 
-            if(Content.indexOf(complete_ban_text) >= 0 )
-                Content.replace(complete_ban_text, "");
+                QString complete_ban_text = complateSearchPrefix(prefix_pieces, Content);
+
+                Loging::printAll(Loging::red, "Complete Ban Text: ", complete_ban_text.toStdString());
+
+                if(Content.indexOf(complete_ban_text) >= 0 )
+                    Content.replace(complete_ban_text, "");
+//                else
+//                    break;
 
 
-            Loging::printAll(Loging::yellow, "Cleared Content: ", Content.toStdString());
+                Loging::printAll(Loging::yellow, "Cleared Content: ", Content.toStdString());
+
+            }while(1);
 
         }
     }

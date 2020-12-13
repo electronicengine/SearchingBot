@@ -30,7 +30,7 @@ public slots:
 
 signals:
     void appendTextQueue(QString Txt);
-    void appendSignal(const QString &Txt);
+//    void appendSignal(const QString &Txt);
 
 private:
     Ui::LogView *ui;

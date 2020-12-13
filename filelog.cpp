@@ -137,21 +137,14 @@ void FileLog::fileSaveOperation()
 
 
 
-void FileLog::createTable(int ColumnSize)
+void FileLog::createTable()
 {
 
     QString query_str;
     QSqlQuery query;
 
-    query_str = "CREATE TABLE a_table (ID integer";
+    query_str = "CREATE TABLE a_table (ID integer, Column0 integer, Column1 VARCHAR(200));";
 
-    for(int i=0; i<ColumnSize; i++)
-    {
-        query_str += QString(", Column");
-        query_str += QString::number(i) + " VARCHAR(200)";
-    }
-
-    query_str += ");";
     Loging::printAll(Loging::yellow, "query str: ", query_str.toStdString());
 
     query.exec(query_str);
@@ -164,30 +157,43 @@ void FileLog::insertValues(int Id, const QString &Header, const QStringList &Val
     QString query_str;
     QSqlQuery query;
 
-    query_str = "INSERT INTO a_table (ID";
+//    if(Values.size() <= 0)
+//    {
+//        query_str = "INSERT INTO a_table (ID, Column0, Column1) ";
+
+//        query_str += "VALUES (" + QString::number(Id) + ",\"" + Header + "\"";
+
+//        query_str += ",\"***\"";
+
+
+//        query_str += "); ";
+//        Loging::printAll(Loging::yellow, "query str: ", query_str.toStdString());
+
+//        query.exec(query_str);
+//    }
 
     for(int i=0; i<Values.size(); i++)
     {
-        query_str += ",";
-        query_str += "Column";
-        query_str += QString::number(i);
+        if(Values.at(i).simplified() != "")
+        {
+            query_str = "INSERT INTO a_table (ID, Column0, Column1) ";
+
+            query_str += "VALUES (" + QString::number(Id) + "," + Header;
+
+            query_str += ",\"";
+            query_str += Values.at(i).simplified();
+            query_str += "\"";
+
+
+            query_str += "); ";
+            Loging::printAll(Loging::yellow, "query str: ", query_str.toStdString());
+
+            query.exec(query_str);
+        }
+
     }
 
-    query_str += ") ";
-    query_str += "VALUES (" + QString::number(Id) + ",\"" + Header + "\"";
 
-    for(int i=0; i<Values.size() - 1; i++)
-    {
-        query_str += ",\"";
-        query_str += Values.at(i).simplified();
-        query_str += "\"";
-    }
-
-    query_str += "); ";
-
-    Loging::printAll(Loging::yellow, "query str: ", query_str.toStdString());
-
-    query.exec(query_str);
 }
 
 
@@ -204,8 +210,6 @@ void FileLog::savetoDataBaseOperation()
     {
         int line_counter = 0;
         bool data_base_created = false;
-        QSqlQuery query;
-        QString query_str;
         QString text = dynamic_cast<LogView *>(Main_Window)->getAllText();
         QTextStream stream(&text);
         QString line;
@@ -233,11 +237,11 @@ void FileLog::savetoDataBaseOperation()
 
                     QStringList columns = line.split("||", Qt::SkipEmptyParts);
 
-                    createTable(columns.size());
+                    createTable();
 
                     insertValues(line_counter, header_column, columns);
 
-                   data_base_created = true;
+                    data_base_created = true;
 
                 }
                 else
@@ -258,6 +262,7 @@ void FileLog::savetoDataBaseOperation()
 
 std::vector<QStringList> FileLog::getCategorizedContent()
 {
+
     std::vector<QStringList> categorized_data;
 
     QString writable = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
@@ -267,13 +272,11 @@ std::vector<QStringList> FileLog::getCategorizedContent()
     QString line;
     QStringList temp_list;
 
-
     if (inputFile.open(QIODevice::ReadOnly))
     {
        QTextStream in(&inputFile);
        while (!in.atEnd())
        {
-
            line = in.readLine();
            if(line.indexOf("====>") < 0)
            {
@@ -298,16 +301,14 @@ std::vector<QStringList> FileLog::getCategorizedContent()
        inputFile.close();
     }
 
-
-
     return categorized_data;
+
 }
 
 
 
 QString &FileLog::getSelectedFileContent()
 {
-
     QString writable = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 
     QString file_name = List_Object->getCurrentItemText();
@@ -319,7 +320,6 @@ QString &FileLog::getSelectedFileContent()
     File_Content.append(s1.readAll());
 
     return File_Content;
-
 }
 
 

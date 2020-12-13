@@ -55,7 +55,7 @@ GridLayout{backgroundColor: transparent;}
 </string>
       </property>
       <property name="text">
-       <string>&lt;h2&gt;Symptoms&lt;/h2&gt;{&lt;li&gt;#1&lt;/li&gt;}&lt;h3&gt;When to see a doctor&lt;/h3&gt;</string>
+       <string>&lt;span class=&quot;mim-font mim-hint&quot; &gt;{&lt;div style=&quot;margin-left: 2em;&quot;&gt;#2&lt;/div&gt;}&lt;strong&gt;TEXT&lt;/strong&gt;</string>
       </property>
      </widget>
     </item>
@@ -76,7 +76,7 @@ GridLayout{backgroundColor: transparent;}
 </string>
       </property>
       <property name="text">
-       <string>&lt;span*&lt;/span&gt;</string>
+       <string>&lt;span class=&quot;mim-feature-ids hidden&quot;&gt;*&lt;/span&gt;,&lt;span class=&quot;mim,&lt;div&gt;,font&quot;&gt;,&lt;div class=&quot;mim,changed mim,change&quot;&gt;,&lt;a*&lt;/a&gt;,&lt;br /&gt;,&lt;span*&lt;/span&gt;,&lt;em*&lt;/em&gt;,&lt;/span&gt;</string>
       </property>
      </widget>
     </item>
@@ -97,7 +97,7 @@ GridLayout{backgroundColor: transparent;}
 </string>
       </property>
       <property name="text">
-       <string>-</string>
+       <string/>
       </property>
      </widget>
     </item>
@@ -118,7 +118,7 @@ GridLayout{backgroundColor: transparent;}
 </string>
       </property>
       <property name="text">
-       <string>https://www.mayoclinic.org/diseases-conditions/abdominal-aortic-aneurysm/symptoms-causes/syc-20350688</string>
+       <string>https://omim.org/entry/[1]</string>
       </property>
      </widget>
     </item>
@@ -139,7 +139,7 @@ GridLayout{backgroundColor: transparent;}
 </string>
       </property>
       <property name="text">
-       <string>Test</string>
+       <string>[1]</string>
       </property>
      </widget>
     </item>

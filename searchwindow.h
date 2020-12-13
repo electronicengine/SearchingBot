@@ -50,6 +50,10 @@ private:
     std::mutex Mutex_;
     void lockInterface(bool Value);
     int Queue_Size;
+    QFile *Temp_File;
+
+
+
 
 };
 
